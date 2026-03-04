@@ -1,16 +1,90 @@
+'use client';
 import Image from "next/image";
+import Hero from "@/components/Hero";
+import {
+  Navbar,
+  NavBody,
+  NavItems,
+  MobileNav,
+  NavbarLogo,
+  NavbarButton,
+  MobileNavHeader,
+  MobileNavToggle,
+  MobileNavMenu
+} from "@/components/ui/resizable-navbar";
+import Grid from "@/components/Grid";
+import { AuroraBackground } from "@/components/ui/aurora-background";
+import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
+  const navItems = [
+    {
+      name: "Main",
+      link: "#features",
+    },
+    {
+      name: "Employment",
+      link: "#pricing",
+    },
+    {
+      name: "Education",
+      link: "#contact",
+    },
+    {
+      name: "Projects",
+      link: "#contact",
+    }
+  ];
+
   return (
-<main className="flex min-h-screen w-full max-w-3xl flex-col justify-center px-16 bg-white dark:bg-black-100">
-  <div>
-    <h1 className="text-5xl font-bold tracking-tight text-black dark:text-white">
-      Joshua Cherenfant
-    </h1>
-    <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-      Computer Science Student | Software Developer
-    </p>
-  </div>
-</main>
+    <div className="min-h-screen">
+      <Navbar>
+        <NavBody>
+          <NavbarLogo />
+          <NavItems items={navItems} />
+          <div className="flex items-center gap-3">
+            <NavbarButton variant="secondary">Login</NavbarButton>
+            <NavbarButton variant="primary">Book a call</NavbarButton>
+          </div>
+        </NavBody>
+      </Navbar>
+
+      <main className="relative">
+        {/* Desktop Only Background */}
+        <div className="hidden md:block">
+          <AuroraBackground>
+            {/* Grid overlay */}
+            <div
+              className={cn(
+                "absolute inset-0 pointer-events-none",
+                "[background-size:100px_100px]",
+                "[background-image:linear-gradient(to_right,rgba(228,228,231,0.25)_1px,transparent_1px),linear-gradient(to_bottom,rgba(228,228,231,0.25)_1px,transparent_1px)]",
+                "dark:[background-image:linear-gradient(to_right,rgba(38,38,38,0.4)_1px,transparent_1px),linear-gradient(to_bottom,rgba(38,38,38,0.4)_1px,transparent_1px)]",
+                "[mask-image:radial-gradient(ellipse_at_center,black_10%,transparent_100%)]"
+              )}
+            />
+            <section className="min-h-[90vh] flex items-center justify-center px-4 text-center">
+              <Hero />
+            </section>
+
+            <section className="mt-50 w-[175vh] relative z-10">
+              <Grid />
+            </section>
+          </AuroraBackground>
+        </div>
+
+        {/* Mobile Simple Background */}
+        <div className="md:hidden bg-white dark:bg-black-100">
+          <section className="min-h-[90vh] flex items-center justify-center px-4 text-center">
+            <Hero />
+          </section>
+
+          <section className="mt-50 w-full relative z-10">
+            <Grid />
+          </section>
+        </div>
+      </main>
+    </div>
   );
 }
