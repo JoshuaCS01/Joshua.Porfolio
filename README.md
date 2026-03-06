@@ -17,9 +17,11 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## What is this?
-This is a simple react web portfolio to showcase my projects, skills, and experience.
+This is a simple react web portfolio to showcase my projects, skills, and experience. The site will serve as quick access for visitors to learn more about my background as a developer.
 
 ## Tech Stack
 React
+
 Tailwind CSS
+
 JavaScript
