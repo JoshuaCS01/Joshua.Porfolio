@@ -233,10 +233,10 @@ export const NavbarLogo = () => {
       <img
         src={'./favicon.ico'}
         alt="logo"
-        width={30}
-        height={30}
+        width={35}
+        height={35}
       />
-      <span className="font-medium text-black dark:text-white">Startup</span>
+      <span className="font-medium text-black dark:text-white">Joshua C.</span>
     </a>
   );
 };

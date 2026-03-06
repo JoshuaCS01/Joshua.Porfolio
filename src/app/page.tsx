@@ -44,8 +44,7 @@ export default function Home() {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-3">
-            <NavbarButton variant="secondary">Login</NavbarButton>
-            <NavbarButton variant="primary">Book a call</NavbarButton>
+            <NavbarButton variant="primary">Contact Me</NavbarButton>
           </div>
         </NavBody>
       </Navbar>
@@ -68,7 +67,7 @@ export default function Home() {
               <Hero />
             </section>
 
-            <section className="mt-50 w-[175vh] relative z-10">
+            <section className="mt-10 w-[175vh] relative z-10 mb-10">
               <Grid />
             </section>
           </AuroraBackground>
