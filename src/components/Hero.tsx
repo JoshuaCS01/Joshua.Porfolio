@@ -33,7 +33,6 @@ const Hero = () => {
           position="right"
         />
       </a>
-
     </div>
   </div>
   );

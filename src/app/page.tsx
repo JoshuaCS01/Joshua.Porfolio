@@ -1,5 +1,6 @@
 'use client';
 import Image from "next/image";
+import { CgArrowDown } from "react-icons/cg";
 import Hero from "@/components/Hero";
 import {
   Navbar,
@@ -16,24 +17,31 @@ import Grid from "@/components/Grid";
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { ShootingStars } from "@/components/ui/shooting-stars";
+import { StarsBackground } from "@/components/ui/stars-background";
+import Projects from "@/components/Projects";
 
 export default function Home() {
   const navItems = [
     {
-      name: "Main",
-      link: "#features",
+      name: "Home",
+      link: "#",
     },
     {
-      name: "Employment",
-      link: "#pricing",
+      name: "About",
+      link: "#about",
     },
     {
-      name: "Education",
-      link: "#contact",
+      name: "Skills",
+      link: "#skills",
     },
     {
       name: "Projects",
-      link: "#contact",
+      link: "#projects",
+    },
+    {
+      name: "Contact",
+      link: "#contact"
     }
   ];
 
@@ -51,37 +59,32 @@ export default function Home() {
 
       <main className="relative">
         {/* Desktop Only Background */}
-        <div className="hidden md:block">
-          <AuroraBackground>
-            {/* Grid overlay */}
-            <div
-              className={cn(
-                "absolute inset-0 pointer-events-none",
-                "[background-size:100px_100px]",
-                "[background-image:linear-gradient(to_right,rgba(228,228,231,0.25)_1px,transparent_1px),linear-gradient(to_bottom,rgba(228,228,231,0.25)_1px,transparent_1px)]",
-                "dark:[background-image:linear-gradient(to_right,rgba(38,38,38,0.4)_1px,transparent_1px),linear-gradient(to_bottom,rgba(38,38,38,0.4)_1px,transparent_1px)]",
-                "[mask-image:radial-gradient(ellipse_at_center,black_10%,transparent_100%)]"
-              )}
-            />
-            <section className="min-h-[90vh] flex items-center justify-center px-4 text-center">
+        <div className=" relative min-h-screen w-full bg-neutral-900 overflow-hidden">
+
+          {/* BACKGROUND LAYER */}
+          <div className="absolute inset-0 z-0">
+            <ShootingStars />
+            <StarsBackground />
+          </div>
+
+          {/* CONTENT LAYER */}
+          <div className="relative z-10 mx-5 lg:mx-25 ">
+
+            <section id="home" className="min-h-screen flex items-center justify-center px-4 text-center">
               <Hero />
             </section>
 
-            <section className="mt-10 w-[175vh] relative z-10 mb-10">
+            <section id="about" className="w-full relative z-10 mb-10">
               <Grid />
             </section>
-          </AuroraBackground>
-        </div>
 
-        {/* Mobile Simple Background */}
-        <div className="md:hidden bg-white dark:bg-black-100">
-          <section className="min-h-[90vh] flex items-center justify-center px-4 text-center">
-            <Hero />
-          </section>
+            <section id="projects" className="w-full relative z-10 mb-10">
+              <Projects />
+            </section>
 
-          <section className="mt-50 w-full relative z-10">
-            <Grid />
-          </section>
+            
+
+          </div>
         </div>
       </main>
     </div>
