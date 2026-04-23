@@ -5,7 +5,6 @@ import { AuroraBackground } from './ui/aurora-background';
 import { cn } from '@/lib/utils';
 import { TextGenerateEffect } from './ui/text-generate-effect';
 import MagicButton from './ui/MagicButton';
-import { FaComputer, FaJava } from 'react-icons/fa6';
 
 const Hero = () => {
   return (
@@ -22,14 +21,14 @@ const Hero = () => {
       />
 
       <p className="text-white/80 text-base sm:text-lg md:text-xl leading-relaxed mb-8">
-        Passionate Software Engineer specializing in Java, Spring Boot, and modern web technologies.
+        Passionate Software Engineer specializing in Java, React and modern web technologies.
         I build scalable, full-stack applications focused on clean architecture, performance, and user experience.
       </p>
 
       <a href="/about">
         <MagicButton
-          title="See More"
-          icon={<FaComputer />}
+          title="LinkedIn"
+          icon={<img  className = "w-8" src="/images/linkedIn.svg" alt="LinkedIn" />}
           position="right"
         />
       </a>

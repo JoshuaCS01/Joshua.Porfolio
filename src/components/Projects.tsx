@@ -3,19 +3,18 @@ import { GlobeDemo } from './ui/GridGlobe'
 import { HoverEffect } from './ui/card-hover-effect'
 import { projects } from '@/data/cardInfo'
 
-
 const Projects = () => {
     return (
         <section id='projects'>
             <div className=" mx-auto px-8 text-white text-center">
-                <h2 className='text-XL'>FEATURED PROJECTS</h2>
-                <br />
-                 <span className="text-blue-600 md:text-7xl lg:text-7xl text-3xl">PROJECTS THAT MAKE AN </span>
-                 <span className= "md:text-7xl lg:text-7xl text-3xl underline font-bold font-serif" >IMPACT</span>
+                <a href="https://github.com/JoshuaCS01">
+                 <span className="md:text-7xl lg:text-7xl text-3xl underline font-bold font-serif">PROJECTS </span>
+                 </a>
+                 <span className= " text-blue-600 md:text-7xl lg:text-7xl text-3xl" >I HAVE WORKED ON SO FAR</span>
                 <br />
                 <br />
                 <p className="text-lg">
-                    <span className="text-white">A selection of my recent work, from complex web apps to innovative tools that solve-real-world-problems </span>
+                    <span className="text-white">A selection of my personal and class projects ranging from complex web apps to innovative tools that solve-real-world-problems. </span>
                 </p>
             </div>
 

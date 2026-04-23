@@ -78,7 +78,7 @@ export default function Home() {
               <Grid />
             </section>
 
-            <section id="projects" className="w-full relative z-10 mb-10">
+            <section id="projects" className="w-full relative z-10 mb-10 scroll-mt-24">
               <Projects />
             </section>
 

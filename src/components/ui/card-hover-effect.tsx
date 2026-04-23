@@ -31,26 +31,8 @@ export const HoverEffect = ({
                     key={item?.link}
                     className="relative group  block p-2 h-full w-full"
                     onMouseEnter={() => setHoveredIndex(idx)}
-                    onMouseLeave={() => setHoveredIndex(null)}
                 >
-                    <AnimatePresence>
-                        {hoveredIndex === idx && (
-                            <motion.span
-                                className="absolute inset-0 h-full w-full bg-neutral-200 dark:bg-slate-800/[0.8] block  rounded-3xl"
-                                layoutId="hoverBackground"
-                                initial={{ opacity: 0 }}
-                                animate={{
-                                    opacity: 1,
-                                    transition: { duration: 0.15 },
-                                }}
-                                exit={{
-                                    opacity: 0,
-                                    transition: { duration: 0.15, delay: 0.2 },
-                                }}
-                            />
-                        )}
-                    </AnimatePresence>
-                    <Card className="lg:h-170 md:200 h-90 relative overflow-hidden">
+                    <Card className="lg:h-170 md:200 h-90 relative overflow-hidden hover:dark:bg-gray-700 hover:ring-2 hover:ring-amber-50">
                         {/* Background Image */}
                         <div className="absolute inset-0 z-0 lg:h-150 h-50">
                             <img
@@ -66,15 +48,15 @@ export const HoverEffect = ({
                             <div className="p-4 bg-black/70 backdrop-blur-sm">
                                 <CardTitle className="mt-0">{item.title}</CardTitle>
 
-                                <CardDescription className="mt-1 text-white line-clamp-2">
+                                <CardDescription className="mt-1 text-white line-clamp-2 hover:line-clamp-none">
                                     {item.description}
                                 </CardDescription>
 
-                                <div className="flex flex-wrap gap-2 mt-2">
+                                <div className="flex flex-wrap gap-2 mt-2 ">
                                     {item.skills.map((skill, i) => (
                                         <span
                                             key={i}
-                                            className="text-white text-[10px] md:text-base lg:text-base px-2 py-1 bg-white/10 rounded-full border border-white/20 hover:bg-white hover:text-black"
+                                            className="text-white text-[10px] md:text-base lg:text-base px-2 py-1 bg-white/10 rounded-full border border-white/20 hover:bg-white hover:text-black "
                                         >
                                             {skill}
                                         </span>
@@ -94,7 +76,7 @@ export const Card = ({ className, children }: any) => {
     return (
         <div
             className={cn(
-                "rounded-2xl h-full w-full overflow-hidden bg-black border border-transparent dark:border-white/[0.2] group-hover:border-slate-700 relative",
+                "rounded-2xl h-full w-full overflow-hidden bg-black border border-transparent dark:border-white/[0.2] group-hover:border-slate-700 relative z-20",
                 className
             )}
         >
@@ -123,11 +105,10 @@ export const CardDescription = ({
     children: React.ReactNode;
 }) => {
     return (
-        <p
-            className={cn(
-                "mt-8 text-zinc-400 tracking-wide leading-relaxed text-sm",
-                className
-            )}
+        <p className={cn(
+            "mt-8 text-zinc-400 tracking-wide leading-relaxed text-sm",
+            className
+        )}
         >
             {children}
         </p>
