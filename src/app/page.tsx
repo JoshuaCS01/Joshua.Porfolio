@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { ShootingStars } from "@/components/ui/shooting-stars";
 import { StarsBackground } from "@/components/ui/stars-background";
 import Projects from "@/components/Projects";
+import Skills from "@/components/Skills";
 
 export default function Home() {
   const navItems = [
@@ -76,6 +77,10 @@ export default function Home() {
 
             <section id="about" className="w-full relative z-10 mb-10">
               <Grid />
+            </section>
+
+            <section id="skills" className="w-full relative z-10 mb-10">
+              <Skills />
             </section>
 
             <section id="projects" className="w-full relative z-10 mb-10 scroll-mt-24">

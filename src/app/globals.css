@@ -1,15 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
+/* Base behavior */
 html {
   scroll-behavior: smooth;
 }
 
+/* Theme tokens */
 @theme {
   --color-black-100: #000319;
   --color-custom-gray: #2c2938;
-  --color-custom-red: "#ff0000";
+  --color-custom-red: #ff0000;
 }
 
+/* Animation variables (Tailwind v4 style) */
 @theme inline {
   --animate-aurora: aurora 60s linear infinite;
   --animate-first: moveVertical 30s ease infinite;
@@ -17,51 +21,74 @@ html {
   --animate-third: moveInCircle 40s linear infinite;
   --animate-fourth: moveHorizontal 40s ease infinite;
   --animate-fifth: moveInCircle 20s ease infinite;
-  @keyframes aurora {
-    from {
-      background-position:
-        50% 50%,
-        50% 50%;
-    }
-    to {
-      background-position:
-        350% 50%,
-        350% 50%;
-    }
+
+  /* ✅ ADDED ORBIT */
+   --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
+}
+
+/* =========================
+   KEYFRAMES (must be global)
+   ========================= */
+
+@keyframes aurora {
+  from {
+    background-position: 50% 50%, 50% 50%;
   }
-    @keyframes moveHorizontal {
+  to {
+    background-position: 350% 50%, 350% 50%;
+  }
+}
+
+@keyframes moveHorizontal {
+  0% {
+    transform: translateX(-50%) translateY(-10%);
+  }
+  50% {
+    transform: translateX(50%) translateY(10%);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-10%);
+  }
+}
+
+@keyframes moveInCircle {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes moveVertical {
+  0% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(50%);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+/* ✅ ADDED ORBIT KEYFRAME */
+@keyframes orbit {
     0% {
-      transform: translateX(-50%) translateY(-10%);
-    }
-    50% {
-      transform: translateX(50%) translateY(10%);
+      transform: rotate(calc(var(--angle) * 1deg))
+        translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
     }
     100% {
-      transform: translateX(-50%) translateY(-10%);
+      transform: rotate(calc(var(--angle) * 1deg + 360deg))
+        translateY(calc(var(--radius) * 1px))
+        rotate(calc((var(--angle) * -1deg) - 360deg));
     }
-  }
- 
-  @keyframes moveInCircle {
-    0% {
-      transform: rotate(0deg);
-    }
-    50% {
-      transform: rotate(180deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
- 
-  @keyframes moveVertical {
-    0% {
-      transform: translateY(-50%);
-    }
-    50% {
-      transform: translateY(50%);
-    }
-    100% {
-      transform: translateY(-50%);
-    }
-  }
+}
+
+.font-body {
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+.font-heading {
+  font-family: "Montserrat", sans-serif;
 }
