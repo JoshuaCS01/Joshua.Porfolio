@@ -236,7 +236,7 @@ export const NavbarLogo = () => {
         width={35}
         height={35}
       />
-      <span className="font-medium text-black dark:text-white">Joshua C.</span>
+      <span className="font-medium text-black dark:text-white">Joshua Cherenfant</span>
     </a>
   );
 };

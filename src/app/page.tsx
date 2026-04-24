@@ -21,6 +21,7 @@ import { ShootingStars } from "@/components/ui/shooting-stars";
 import { StarsBackground } from "@/components/ui/stars-background";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
+import Contact from "@/components/Contact";
 
 export default function Home() {
   const navItems = [
@@ -41,7 +42,7 @@ export default function Home() {
       link: "#projects",
     },
     {
-      name: "Contact",
+      name: "Contact Me",
       link: "#contact"
     }
   ];
@@ -53,7 +54,6 @@ export default function Home() {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-3">
-            <NavbarButton variant="primary">Contact Me</NavbarButton>
           </div>
         </NavBody>
       </Navbar>
@@ -75,20 +75,24 @@ export default function Home() {
               <Hero />
             </section>
 
-            <section id="about" className="w-full relative z-10 mb-10">
+            <section id="about" className="w-full relative z-10 mb-10 scroll-mt-60">
               <Grid />
             </section>
 
-            <section id="skills" className="w-full relative z-10 mb-10">
+            <section id="skills" className="w-full relative z-10 mb-70 scroll-mt-66">
               <Skills />
             </section>
 
-            <section id="projects" className="w-full relative z-10 mb-10 scroll-mt-24">
+            <section id="projects" className="w-full relative z-10 mb-10 scroll-mt-30">
               <Projects />
             </section>
 
-            
+            <section id="contact" className="w-full relative z-10 mb-10">
+              <Contact />
+            </section>
 
+
+            <p className="text-white text-center mb-25 font-bold">Thanks for stopping by</p>
           </div>
         </div>
       </main>

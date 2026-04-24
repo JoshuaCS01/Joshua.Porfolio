@@ -106,7 +106,7 @@ export const BentoGridItem = ({
               <h1>About Me</h1>
               <br></br>
             </div>
-            <div className="font-sans font-extralight text-neutral-300 lg:text-2xl md:text-xs text-sm">
+            <div className="font-sans font-extralight text-neutral-300 lg:text-2xl md:text-xs text-sm text-justify">
               <p>I am a Computer Science graduate passionate about building reliable and scalable software solutions. I enjoy working on full-stack applications using technologies like Java, TypeScript, React, and REST APIs, with a strong focus on debugging, system reliability, and writing clean, maintainable code. Through academic and personal projects, I’ve gained experience developing web and mobile applications, working with databases, and designing backend systems.</p>
               <br></br>
               <p>Outside of software development, I’m someone who enjoys both technical and creative hobbies. I played college marching band, which taught me discipline, teamwork, and consistency while performing in front of large audiences. I’m also a big fan of college football (GO DAWGS!) and I enjoy following games and the overall energy of the sport.</p>
