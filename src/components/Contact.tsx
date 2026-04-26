@@ -63,7 +63,7 @@ export const Contact: React.FC = () => {
 
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Message</Label>
-          <textarea className="text-white bg-custom-ground" name="message" placeholder="Type Message Here..." rows="5" />
+          <textarea className="text-white bg-custom-ground" name="message" placeholder="Type Message Here..."  rows={4} />
         </LabelInputContainer>
 
         <button
