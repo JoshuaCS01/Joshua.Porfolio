@@ -43,7 +43,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen ">
       <Navbar>
         <NavBody>
           <NavbarLogo />
@@ -75,7 +75,7 @@ export default function Home() {
               <Grid />
             </section>
 
-            <section id="skills" className="w-full relative z-10 mb-70 scroll-mt-66">
+            <section id="skills" className="w-full relative z-10 md:mb-70 lg:mb-70 mb-40  scroll-mt-66">
               <Skills />
             </section>
 
