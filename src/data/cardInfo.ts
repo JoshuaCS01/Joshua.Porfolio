@@ -23,7 +23,7 @@ export const projects = [
   {
     title: "TheMP3layer",
     description: "This is an android media player that allows users to browse and play music files stored on their mobile device. TheMP3layer also builds a database and retrieves additional metadata of the music in order to improve song organization, sorting, and filtering.",
-    img: "/images/TheMP3layer.png",
+    img: "/images/TheMP3Layer.png",
     skills: ["Android Studio", "SQLite", "Java", "ADB"],
     link: "https://github.com/JoshuaCS01/TheMP3layer",
   },
