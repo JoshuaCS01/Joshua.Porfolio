@@ -14,7 +14,6 @@ import {
   MobileNavMenu
 } from "@/components/ui/resizable-navbar";
 import Grid from "@/components/Grid";
-import { AuroraBackground } from "@/components/ui/aurora-background";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { ShootingStars } from "@/components/ui/shooting-stars";
@@ -41,10 +40,6 @@ export default function Home() {
       name: "Projects",
       link: "#projects",
     },
-    {
-      name: "Contact Me",
-      link: "#contact"
-    }
   ];
 
   return (
@@ -54,6 +49,7 @@ export default function Home() {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-3">
+            <NavbarButton variant="primary" href = "#contact">Contact Me</NavbarButton>
           </div>
         </NavBody>
       </Navbar>

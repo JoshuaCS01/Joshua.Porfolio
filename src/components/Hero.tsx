@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import { motion } from "motion/react";
-import { AuroraBackground } from './ui/aurora-background';
 import { cn } from '@/lib/utils';
 import { TextGenerateEffect } from './ui/text-generate-effect';
 import MagicButton from './ui/MagicButton';
@@ -29,6 +28,14 @@ const Hero = () => {
         A Passionate Software Engineer specializing in Java, React, Next.js, and TypeScript.
         I build scalable, full-stack applications focused on clean architecture, performance, and user experience.
       </p>
+
+      <a href="/JoshuaCherenfant_Resume.docx" download>
+        <MagicButton
+          title="Download Resume"
+          icon={<img  className = "w-8" src="/images/Download.svg" alt="LinkedIn" />}
+          position="right"
+        />
+      </a>
 
     </div>
   </div>

@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { BackgroundGradientAnimation } from "./background-gradient-animation";
 import { GlobeDemo } from "./GridGlobe"
 import { ImagesSlider } from "./images-slider";
 import { motion } from "motion/react";
@@ -59,7 +58,7 @@ export const BentoGridItem = ({
         id === 1 && "h-75 md:h-auto",
         id === 2 && "h-200 md:h-auto",
         id === 3 && "h-[300px] md:h-auto",
-        id === 4 && "h-40 md:h-auto" 
+        id === 4 && "h-40 md:h-auto"
       )}
 
       style={{
@@ -107,11 +106,19 @@ export const BentoGridItem = ({
               <br></br>
             </div>
             <div className="font-sans font-extralight text-neutral-300 lg:text-2xl md:text-xs text-sm text-justify">
-              <p>I am a Computer Science graduate passionate about building reliable and scalable software solutions. I enjoy working on full-stack applications using technologies like Java, TypeScript, React, and REST APIs, with a strong focus on debugging, system reliability, and writing clean, maintainable code. Through academic and personal projects, I’ve gained experience developing web and mobile applications, working with databases, and designing backend systems.</p>
+              <p >I am a University of Georgia graduate with a Bachelors of Science in Computer Science. I chose computer science beacause I love creating things and have a strong drive to solve problems.
+                I enjoy working on full-stack applications using Java, TypeScript, React, and REST APIs.
+                I’m always looking for new things to build and ways to improve, and I enjoy turning ideas into applications as I continue growing as a software engineer.
+                </p>
               <br></br>
-              <p>Outside of software development, I’m someone who enjoys both technical and creative hobbies. I played college marching band, which taught me discipline, teamwork, and consistency while performing in front of large audiences. I’m also a big fan of college football (GO DAWGS!) and I enjoy following games and the overall energy of the sport.</p>
+              <p>Outside of software development, I've got a couple interests and hobbies. I have a passion for music and I am a big enjoyer of College Football. 
+                This lead me to play in my University's marching band to purue that passion and support my favorite football team, The Georgia Bulldawgs (GO DAWGS!!).
+                </p>
               <br></br>
-              <p>In my free time, I enjoy playing guitar, watching movies, and playing video games, but I also spend a lot of time coding and building personal projects. I like creating programs that solve problems I run into, including building browser extensions to improve my own workflow and even a Discord bot just to mess with my friends. These projects help me stay creative while sharpening my problem-solving skills in a hands-on way. I’m always looking for new things to build and ways to improve, and I enjoy turning ideas into working software as I continue growing as a software engineer.</p>
+              <p>In my free time I spend a lot of time coding and building personal projects to solve problems I run into. 
+                I've made browser extensions to improve my workflow and Discord bots just to mess with my friends. 
+                Those projects while they are small, help me stay creative while improving my coding skills. 
+                When Im not working on personal projects I am usually eiher playing guitar, watching movies, or playing video games.</p>
             </div>
           </div>
         )}
@@ -132,21 +139,12 @@ export const BentoGridItem = ({
         )}
       </div>
 
-      {/* GRADIENT CARD */}
-      {
-        id === 7 && (
-          <BackgroundGradientAnimation>
-            <div className="absolute z-50 flex items-center justify-center text-white font-bold" />
-          </BackgroundGradientAnimation>
-        )
-      }
-
       <div className={cn(
         titleClassName, 'group-hover/bento:translate-x-2 transition duration-200 relative md:h-full min-h-40 flex flex-col px-5 p-5 lg:p-10'
       )}>
 
         {id === 4 && (
-          <div className="absolute inset-0 opacity-40">
+          <div className="absolute inset-0 opacity-40 z-50">
             <GlobeDemo />
           </div>)}
 

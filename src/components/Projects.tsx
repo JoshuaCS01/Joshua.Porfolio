@@ -8,14 +8,10 @@ const Projects = () => {
         <section id='projects'>
             <div className=" mx-auto px-8 text-white text-center">
                 <a href="https://github.com/JoshuaCS01">
-                 <span className="md:text-7xl lg:text-7xl text-3xl underline font-bold font-serif">PROJECTS </span>
+                 <span className="md:text-7xl lg:text-7xl text-3xl underline font-bold font-body">PROJECTS</span>
                  </a>
-                 <span className= " text-blue-600 md:text-7xl lg:text-7xl text-3xl" >I HAVE WORKED ON SO FAR</span>
+                 <span className= " text-blue-600 md:text-7xl lg:text-7xl text-3xl" > I HAVE WORKED ON</span>
                 <br />
-                <br />
-                <p className="text-lg">
-                    <span className="text-white">A selection of my personal and class projects ranging from complex web apps to innovative tools that solve-real-world-problems. </span>
-                </p>
             </div>
 
             <div className="max-w-8xl mx-0 px-0 lg:px-8 md:px-8 lg:mx-auto md:mx-auto">
