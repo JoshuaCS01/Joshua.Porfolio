@@ -17,38 +17,55 @@ export function ColourfulText({ text }: { text: string }) {
   ];
 
   const [currentColors, setCurrentColors] = React.useState(colors);
-  const [count, setCount] = React.useState(0);
+  const [ready, setReady] = React.useState(false);
 
   React.useEffect(() => {
+    const id = requestAnimationFrame(() => setReady(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+
+  React.useEffect(() => {
+    if (!ready) return;
+
     const interval = setInterval(() => {
       const shuffled = [...colors].sort(() => Math.random() - 0.5);
       setCurrentColors(shuffled);
-      setCount((prev) => prev + 1);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [ready]);
 
-  return text.split("").map((char, index) => (
-    <motion.span
-      key={`${char}-${count}-${index}`}
-      initial={{
-        y: 0,
-      }}
-      animate={{
-        color: currentColors[index % currentColors.length],
-        y: [0, -3, 0],
-        scale: [1, 1.01, 1],
-        filter: ["blur(0px)", `blur(5px)`, "blur(0px)"],
-        opacity: [1, 0.8, 1],
-      }}
-      transition={{
-        duration: 0.5,
-        delay: index * 0.05,
-      }}
-      className="inline-block whitespace-pre font-sans tracking-tight"
-    >
-      {char}
-    </motion.span>
-  ));
+  return (
+    <>
+      {text.split("").map((char, index) => {
+        const color = currentColors[index % currentColors.length];
+
+        return (
+          <motion.span
+            key={index}
+            initial={false}
+            animate={
+              ready
+                ? {
+                    color,
+                    y: -2,
+                    scale: 1.01,
+                    opacity: 0.95,
+                  }
+                : {}
+            }
+            transition={{
+              duration: 0.3,
+              ease: "easeOut",
+              delay: index * 0.03,
+            }}
+            className="inline-block whitespace-pre font-sans tracking-tight"
+          >
+            {char}
+          </motion.span>
+        );
+      })}
+    </>
+  );
 }
