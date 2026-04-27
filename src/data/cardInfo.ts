@@ -2,7 +2,7 @@ export const projects = [
   {
     title: "Bulldawgs Cinema",
     description: "An online Cinema E-Booking System featuring movie browsing, trailer playback, ticket booking, user authentication, and checking out.",
-    img: "/images/cinema.jpg",
+    img: "/images/bulldawgsCinema.jpg",
     skills: ["Spring Boot", "MySQL", "User Auth.", "Agile/Waterfall methodology", "API Integration", "HTML/CSS", "Facade & Singleton design patterns"],
     link: "https://github.com/andargachewtadesse/cinema-ebooking-system",
   },
