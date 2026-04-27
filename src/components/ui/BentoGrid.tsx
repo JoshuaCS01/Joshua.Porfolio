@@ -23,7 +23,7 @@ export const BentoGrid = ({
 };
 
 const images = [
-  "../images/temptest.jpg",
+  "../images/fountain1.jpg",
   "../images/band.jpg",
   "../images/santa.jpg"
 
