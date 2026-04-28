@@ -112,13 +112,13 @@ export const BentoGridItem = ({
                 </p>
               <br></br>
               <p>Outside of software development, I've got a couple interests and hobbies. I have a passion for music and I am a big enjoyer of College Football. 
-                This lead me to play in my University's marching band to purue that passion and support my favorite football team, The Georgia Bulldawgs (GO DAWGS!!).
+                This led me to play in my University's marching band to pursue that passion and support my favorite football team, The Georgia Bulldawgs (GO DAWGS!!).
                 </p>
               <br></br>
               <p>In my free time I spend a lot of time coding and building personal projects to solve problems I run into. 
-                I've made browser extensions to improve my workflow and Discord bots just to mess with my friends. 
-                Those projects while they are small, help me stay creative while improving my coding skills. 
-                When Im not working on personal projects I am usually eiher playing guitar, watching movies, or playing video games.</p>
+                I have made browser extensions to improve my workflow and Discord bots just to mess with my friends. 
+                Those projects, while they are small, help me stay creative while improving my coding skills. 
+                When Im not working on personal projects, I am usually playing guitar, watching movies, or playing video games.</p>
             </div>
           </div>
         )}
