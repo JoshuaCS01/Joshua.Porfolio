@@ -71,19 +71,19 @@ export default function Home() {
               <Hero />
             </section>
 
-            <section id="about" className="w-full relative z-10 mb-10 scroll-mt-60">
+            <section id="about" className="w-full relative z-10 mb-10  1440p:scroll-mt-60 1080p:scroll-mt-25">
               <Grid />
             </section>
 
-            <section id="skills" className="w-full relative z-10 md:mb-70 lg:mb-70 mb-40  scroll-mt-66">
+            <section id="skills" className="w-full relative z-10 md:mb-70 lg:mb-70 mb-40  1440p:scroll-mt-66 1080p:scroll-mt-25">
               <Skills />
             </section>
 
-            <section id="projects" className="w-full relative z-10 mb-10 scroll-mt-30">
+            <section id="projects" className="w-full relative z-10 mb-10 scroll-mt-30 ">
               <Projects />
             </section>
 
-            <section id="contact" className="w-full relative z-10 mb-10">
+            <section id="contact" className="w-full relative z-10 mb-10 1080p:scroll-mt-25">
               <Contact />
             </section>
 

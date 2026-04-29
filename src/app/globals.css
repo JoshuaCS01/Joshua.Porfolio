@@ -23,6 +23,9 @@ html {
   --animate-fourth: moveHorizontal 40s ease infinite;
   --animate-fifth: moveInCircle 20s ease infinite;
 
+  --breakpoint-1080p: 1920px;
+  --breakpoint-1440p: 2560px;
+
   /* ✅ ADDED ORBIT */
    --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
 

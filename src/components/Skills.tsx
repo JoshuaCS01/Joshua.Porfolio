@@ -14,13 +14,13 @@ const SkillItem = ({ src, label }: { src: string; label: string }) => (
 const Skills = () => {
     return (
         <section id='skills'>
-            <div className="flex flex-col  md:flex-row items-center justify-center md:gap-100 lg:gap-100  gap-0 h-200 lg:mb-50 md:mb-50 mb-0  lg:w-max mg:w-max w-auto mx-auto">
+            <div className="flex flex-col  md:flex-row items-center justify-center 1440p:gap-100  1080p:gap-75 gap-0 h-200 lg:mb-50 md:mb-50 mb-0  lg:w-max mg:w-max w-auto mx-auto">
 
                 {/* LEFT SIDE (text) */}
                 <div className="w-full md:w-1/2 text-white ">
-                    <h1 className="md:text-7xl lg:text-7xl text-3xl underline font-bold font-heading text-center mx-auto w-fit lg:mb-10 md:mb-10">MY SKILLS</h1>
+                    <h1 className="1440p:text-7xl 1080p:text-5xl text-3xl underline font-bold font-heading text-center mx-auto w-fit lg:mb-10 md:mb-10">MY SKILLS</h1>
                     <br></br>
-                    <div className=" lg:text-xl  md:text-xl  text-xs font-head leading-relaxed font-heading space-y-6 max-w-2xl text-justify">
+                    <div className=" 1440p:text-xl 1080p:text-lg text-xs font-head leading-relaxed font-heading space-y-6 max-w-2xl text-justify">
                         <p>Through both my coursework and personal projects I have developed a strong skill set in front-end development.
                             My foundation is paved with HTML, CSS, JavaScript, and TypeScript and I frequently use React and Next.js for modern web applications.</p>
 

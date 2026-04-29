@@ -21,7 +21,7 @@ export const HoverEffect = ({
     return (
         <div
             className={cn(
-                "grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3  py-10  lg:mx-75 md:mx-75",
+                "grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3  py-10 w-full h-[50%]",
                 className
             )}
         >
@@ -32,7 +32,7 @@ export const HoverEffect = ({
                     className="relative group  block p-2 h-full w-full"
                     onMouseEnter={() => setHoveredIndex(idx)}
                 >
-                    <Card className="lg:h-170 md:200 h-90 relative overflow-hidden hover:dark:bg-gray-700 hover:ring-2 hover:ring-amber-50">
+                    <Card className="1080p:h-130 1440p:h-170 md:200 h-90 relative overflow-hidden hover:dark:bg-gray-700 hover:ring-2 hover:ring-amber-50">
                         {/* Background Image */}
                         <div className="absolute inset-0 z-0 lg:h-150 h-50">
                             <img
@@ -56,7 +56,7 @@ export const HoverEffect = ({
                                     {item.skills.map((skill, i) => (
                                         <span
                                             key={i}
-                                            className="text-white text-[10px] md:text-base lg:text-base px-2 py-1 bg-white/10 rounded-full border border-white/20 hover:bg-white hover:text-black "
+                                            className="text-white text-[10px] 1080p:text-xs 1440p:text-base px-2 py-1 bg-white/10 rounded-full border border-white/20 hover:bg-white hover:text-black "
                                         >
                                             {skill}
                                         </span>
