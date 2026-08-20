@@ -59,7 +59,7 @@ const wrap = (value: number, maximum: number) =>
   ((value % maximum) + maximum) % maximum;
 
 export const StarsBackground: React.FC<StarBackgroundProps> = ({
-  starDensity = 0.00015,
+  starDensity = 0.00021,
   allStarsTwinkle = true,
   twinkleProbability = 0.7,
   minTwinkleSpeed = 0.5,

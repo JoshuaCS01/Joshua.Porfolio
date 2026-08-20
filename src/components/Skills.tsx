@@ -45,25 +45,27 @@ const Skills = () => {
   return (
     <div className="grid w-full items-center gap-10 xl:grid-cols-[minmax(0,1fr)_36rem] xl:gap-12">
       <div className="min-w-0 text-white">
-        <h2 className="mx-auto mb-8 w-fit text-center font-heading text-3xl font-bold underline sm:text-4xl lg:text-5xl">
-          MY SKILLS
-        </h2>
-        <div className="max-w-2xl space-y-6 text-left font-heading text-sm leading-relaxed sm:text-base md:text-justify lg:text-lg">
-          <p>
-            Through both my coursework and personal projects I have developed a strong skill set in front-end development.
-            My foundation is paved with HTML, CSS, JavaScript, and TypeScript and I frequently use React and Next.js for modern web applications.
-          </p>
+        <div className="mx-auto w-full max-w-2xl">
+          <h2 className="mx-auto mb-8 w-fit text-center font-heading text-3xl font-bold underline sm:text-4xl lg:text-5xl">
+            MY SKILLS
+          </h2>
+          <div className="w-full space-y-6 text-left font-heading text-sm leading-relaxed sm:text-base md:text-justify lg:text-lg">
+            <p>
+              Through both my coursework and personal projects I have developed a strong skill set in front-end development.
+              My foundation is paved with HTML, CSS, JavaScript, and TypeScript and I frequently use React and Next.js for modern web applications.
+            </p>
 
-          <p>
-            My coursework has prepared me for team projects by giving me multiple opportunities to collaborate with other students on semester long projects.
-            This gave me experience working with version control systems, participating in code reviews, and dividing responsibilities.
-            These projects helped me strengthen my communication skills while learning how to integrate front-end and back-end features effectively in a shared codebase.
-          </p>
+            <p>
+              My coursework has prepared me for team projects by giving me multiple opportunities to collaborate with other students on semester long projects.
+              This gave me experience working with version control systems, participating in code reviews, and dividing responsibilities.
+              These projects helped me strengthen my communication skills while learning how to integrate front-end and back-end features effectively in a shared codebase.
+            </p>
 
-          <p>
-            On the back-end side, I’ve worked with Java using Spring Boot and Node.js to build server-side applications and RESTful APIs.
-            I’ve also used MySQL, and Firebase to design and manage databases in projects that needed authentication and storage of user data.
-          </p>
+            <p>
+              On the back-end side, I’ve worked with Java using Spring Boot and Node.js to build server-side applications and RESTful APIs.
+              I’ve also used MySQL, and Firebase to design and manage databases in projects that needed authentication and storage of user data.
+            </p>
+          </div>
         </div>
       </div>
 
