@@ -1,7 +1,6 @@
 'use client';
 import Image from "next/image";
 import { CgArrowDown } from "react-icons/cg";
-import { Analytics } from "@vercel/analytics/next"
 import Hero from "@/components/Hero";
 import {
   Navbar,
@@ -56,7 +55,6 @@ export default function Home() {
       </Navbar>
 
       <main className="relative">
-        <Analytics />
         {/* Desktop Only Background */}
         <div className=" relative min-h-screen w-full bg-neutral-900 overflow-hidden">
 
