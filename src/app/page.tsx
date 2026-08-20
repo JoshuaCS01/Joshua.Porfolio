@@ -1,6 +1,6 @@
-'use client';
-import Image from "next/image";
-import { CgArrowDown } from "react-icons/cg";
+"use client";
+
+import { useCallback, useState } from "react";
 import Hero from "@/components/Hero";
 import {
   Navbar,
@@ -14,8 +14,6 @@ import {
   MobileNavMenu
 } from "@/components/ui/resizable-navbar";
 import Grid from "@/components/Grid";
-import { motion } from "motion/react";
-import { cn } from "@/lib/utils";
 import { ShootingStars } from "@/components/ui/shooting-stars";
 import { StarsBackground } from "@/components/ui/stars-background";
 import Projects from "@/components/Projects";
@@ -23,6 +21,10 @@ import Skills from "@/components/Skills";
 import Contact from "@/components/Contact";
 
 export default function Home() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const mobileMenuId = "mobile-navigation-menu";
+  const closeMobileMenu = useCallback(() => setIsMobileMenuOpen(false), []);
+
   const navItems = [
     {
       name: "Home",
@@ -52,44 +54,73 @@ export default function Home() {
             <NavbarButton variant="primary" href = "#contact">Contact Me</NavbarButton>
           </div>
         </NavBody>
+
+        <MobileNav>
+          <MobileNavHeader>
+            <NavbarLogo />
+            <MobileNavToggle
+              isOpen={isMobileMenuOpen}
+              controlsId={mobileMenuId}
+              onClick={() => setIsMobileMenuOpen((open) => !open)}
+            />
+          </MobileNavHeader>
+          <MobileNavMenu
+            id={mobileMenuId}
+            isOpen={isMobileMenuOpen}
+            onClose={closeMobileMenu}
+          >
+            {navItems.map((item) => (
+              <a
+                key={item.name}
+                href={item.link}
+                onClick={closeMobileMenu}
+                className="w-full rounded-md px-3 py-2 text-base font-medium text-neutral-800 hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:text-neutral-200 dark:hover:bg-neutral-800"
+              >
+                {item.name}
+              </a>
+            ))}
+            <a
+              href="#contact"
+              onClick={closeMobileMenu}
+              className="w-full rounded-md bg-white px-4 py-3 text-center text-sm font-bold text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              Contact Me
+            </a>
+          </MobileNavMenu>
+        </MobileNav>
       </Navbar>
 
-      <main className="relative">
-        {/* Desktop Only Background */}
-        <div className=" relative min-h-screen w-full bg-neutral-900 overflow-hidden">
+      <main className="relative min-h-screen overflow-x-clip bg-neutral-900">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-0"
+        >
+          <ShootingStars />
+          <StarsBackground />
+        </div>
 
-          {/* BACKGROUND LAYER */}
-          <div className="absolute inset-0 z-0">
-            <ShootingStars />
-            <StarsBackground />
-          </div>
-
-          {/* CONTENT LAYER */}
-          <div className="relative z-10 mx-5 lg:mx-25 ">
-
-            <section id="home" className="min-h-screen flex items-center justify-center px-4 text-center">
+        <div className="relative z-10 mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-10">
+            <section id="home" className="flex min-h-[100svh] scroll-mt-24 items-center justify-center">
               <Hero />
             </section>
 
-            <section id="about" className="w-full relative z-10 mb-10  1440p:scroll-mt-60 1080p:scroll-mt-25">
+            <section id="about" className="relative z-10 w-full scroll-mt-28 py-14 sm:py-20">
               <Grid />
             </section>
 
-            <section id="skills" className="w-full relative z-10 md:mb-70 lg:mb-70 mb-40  1440p:scroll-mt-66 1080p:scroll-mt-25">
+            <section id="skills" className="relative z-10 w-full scroll-mt-28 py-14 sm:py-20">
               <Skills />
             </section>
 
-            <section id="projects" className="w-full relative z-10 mb-10 scroll-mt-30 ">
+            <section id="projects" className="relative z-10 w-full scroll-mt-28 py-14 sm:py-20">
               <Projects />
             </section>
 
-            <section id="contact" className="w-full relative z-10 mb-10 1080p:scroll-mt-25">
+            <section id="contact" className="relative z-10 w-full scroll-mt-28 py-14 sm:py-20">
               <Contact />
             </section>
 
-
-            <p className="text-white text-center mb-25 font-bold">Thanks for stopping by</p>
-          </div>
+            <p className="pb-16 text-center font-bold text-white">Thanks for stopping by!</p>
         </div>
       </main>
     </div>
