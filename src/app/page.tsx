@@ -120,7 +120,7 @@ export default function Home() {
               <Contact />
             </section>
 
-            <p className="pb-16 text-center font-bold text-white">Thanks for stopping by</p>
+            <p className="pb-16 text-center font-bold text-white">Thanks for stopping by!</p>
         </div>
       </main>
     </div>

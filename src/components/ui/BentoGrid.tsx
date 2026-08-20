@@ -69,7 +69,7 @@ export const BentoGridItem = ({
           </div>
           <div
             className={cn(
-              "absolute inset-x-0 bottom-0 z-20 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/35 to-transparent p-5 pt-24 transition duration-200 group-hover/bento:translate-x-2 sm:p-8",
+              "absolute inset-x-0 bottom-0 z-20 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/35 to-transparent p-5 pt-24 sm:p-8",
               titleClassName,
             )}
           >

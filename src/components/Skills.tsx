@@ -45,10 +45,10 @@ const Skills = () => {
   return (
     <div className="grid w-full items-center gap-10 xl:grid-cols-[minmax(0,1fr)_36rem] xl:gap-12">
       <div className="min-w-0 text-white">
-        <h2 className="mx-auto mb-8 w-fit text-center font-heading text-3xl font-bold underline sm:text-4xl lg:text-5xl xl:mx-0 xl:text-left">
+        <h2 className="mx-auto mb-8 w-fit text-center font-heading text-3xl font-bold underline sm:text-4xl lg:text-5xl">
           MY SKILLS
         </h2>
-        <div className="max-w-2xl space-y-6 text-left font-heading text-sm leading-relaxed sm:text-base lg:text-lg">
+        <div className="max-w-2xl space-y-6 text-left font-heading text-sm leading-relaxed sm:text-base md:text-justify lg:text-lg">
           <p>
             Through both my coursework and personal projects I have developed a strong skill set in front-end development.
             My foundation is paved with HTML, CSS, JavaScript, and TypeScript and I frequently use React and Next.js for modern web applications.

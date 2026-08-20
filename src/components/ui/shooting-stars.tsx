@@ -1,17 +1,8 @@
 "use client";
-import { cn } from "@/lib/utils";
-import React, { useEffect, useState, useRef } from "react";
-import { useReducedMotion } from "motion/react";
 
-interface ShootingStar {
-  id: number;
-  x: number;
-  y: number;
-  angle: number;
-  scale: number;
-  speed: number;
-  distance: number;
-}
+import { cn } from "@/lib/utils";
+import { useReducedMotion } from "motion/react";
+import React, { useEffect, useId, useRef } from "react";
 
 interface ShootingStarsProps {
   minSpeed?: number;
@@ -25,136 +16,146 @@ interface ShootingStarsProps {
   className?: string;
 }
 
-const getRandomStartPoint = () => {
-  const side = Math.floor(Math.random() * 4);
-  const offset = Math.random() * window.innerWidth;
+const randomBetween = (minimum: number, maximum: number) =>
+  minimum + Math.random() * (maximum - minimum);
 
-  switch (side) {
-    case 0:
-      return { x: offset, y: 0, angle: 45 };
-    case 1:
-      return { x: window.innerWidth, y: offset, angle: 135 };
-    case 2:
-      return { x: offset, y: window.innerHeight, angle: 225 };
-    case 3:
-      return { x: 0, y: offset, angle: 315 };
-    default:
-      return { x: 0, y: 0, angle: 45 };
-  }
-};
 export const ShootingStars: React.FC<ShootingStarsProps> = ({
-  minSpeed = 10,
-  maxSpeed = 30,
-  minDelay = 1200,
-  maxDelay = 4200,
-  starColor = "#9E00FF",
-  trailColor = "#2EB9DF",
-  starWidth = 10,
-  starHeight = 1,
+  minSpeed = 420,
+  maxSpeed = 620,
+  minDelay = 5000,
+  maxDelay = 10000,
+  starColor = "#f4f1ff",
+  trailColor = "#6173ff",
+  starWidth = 160,
+  starHeight = 1.25,
   className,
 }) => {
-  const [star, setStar] = useState<ShootingStar | null>(null);
+  const groupRef = useRef<SVGGElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const shouldReduceMotion = Boolean(useReducedMotion());
+  const gradientId = `shooting-star-${useId().replaceAll(":", "")}`;
 
   useEffect(() => {
+    const svg = svgRef.current;
+    const group = groupRef.current;
+    if (!svg || !group) return;
+
+    group.style.visibility = "hidden";
     if (shouldReduceMotion) return;
 
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
-    let isCancelled = false;
+    let animationFrameId: number | undefined;
+    let cancelled = false;
 
-    const createStar = () => {
-      if (isCancelled) return;
-
-      const { x, y, angle } = getRandomStartPoint();
-      const newStar: ShootingStar = {
-        id: Date.now(),
-        x,
-        y,
-        angle,
-        scale: 1,
-        speed: Math.random() * (maxSpeed - minSpeed) + minSpeed,
-        distance: 0,
-      };
-      setStar(newStar);
-
-      const randomDelay = Math.random() * (maxDelay - minDelay) + minDelay;
-      timeoutId = setTimeout(createStar, randomDelay);
+    const scheduleNext = () => {
+      if (cancelled) return;
+      timeoutId = setTimeout(
+        launchStar,
+        randomBetween(minDelay, maxDelay),
+      );
     };
 
-    createStar();
+    const launchStar = () => {
+      if (cancelled) return;
+
+      const bounds = svg.getBoundingClientRect();
+      const angle = randomBetween(27, 40);
+      const angleInRadians = (angle * Math.PI) / 180;
+      const velocity = randomBetween(minSpeed, maxSpeed);
+      let x = randomBetween(-starWidth * 0.25, bounds.width * 0.78);
+      let y = randomBetween(-10, bounds.height * 0.18);
+      let previousTimestamp: number | undefined;
+
+      group.style.visibility = "visible";
+      group.style.opacity = "0";
+
+      const move = (timestamp: number) => {
+        if (cancelled) return;
+
+        if (previousTimestamp === undefined) {
+          previousTimestamp = timestamp;
+        }
+        const elapsedSeconds = Math.min(
+          (timestamp - previousTimestamp) / 1000,
+          0.05,
+        );
+        previousTimestamp = timestamp;
+
+        x += Math.cos(angleInRadians) * velocity * elapsedSeconds;
+        y += Math.sin(angleInRadians) * velocity * elapsedSeconds;
+        group.setAttribute("transform", `translate(${x} ${y}) rotate(${angle})`);
+        group.style.opacity = "0.95";
+
+        const isOutside =
+          x - starWidth > bounds.width + 20 ||
+          y - starWidth > bounds.height + 20;
+
+        if (isOutside) {
+          group.style.visibility = "hidden";
+          group.style.opacity = "0";
+          animationFrameId = undefined;
+          scheduleNext();
+          return;
+        }
+
+        animationFrameId = window.requestAnimationFrame(move);
+      };
+
+      animationFrameId = window.requestAnimationFrame(move);
+    };
+
+    scheduleNext();
 
     return () => {
-      isCancelled = true;
+      cancelled = true;
+      group.style.visibility = "hidden";
       if (timeoutId !== undefined) clearTimeout(timeoutId);
-    };
-  }, [minSpeed, maxSpeed, minDelay, maxDelay, shouldReduceMotion]);
-
-  useEffect(() => {
-    if (shouldReduceMotion) return;
-
-    const moveStar = () => {
-      if (star) {
-        setStar((prevStar) => {
-          if (!prevStar) return null;
-          const newX =
-            prevStar.x +
-            prevStar.speed * Math.cos((prevStar.angle * Math.PI) / 180);
-          const newY =
-            prevStar.y +
-            prevStar.speed * Math.sin((prevStar.angle * Math.PI) / 180);
-          const newDistance = prevStar.distance + prevStar.speed;
-          const newScale = 1 + newDistance / 100;
-          if (
-            newX < -20 ||
-            newX > window.innerWidth + 20 ||
-            newY < -20 ||
-            newY > window.innerHeight + 20
-          ) {
-            return null;
-          }
-          return {
-            ...prevStar,
-            x: newX,
-            y: newY,
-            distance: newDistance,
-            scale: newScale,
-          };
-        });
+      if (animationFrameId !== undefined) {
+        window.cancelAnimationFrame(animationFrameId);
       }
     };
-
-    const animationFrame = requestAnimationFrame(moveStar);
-    return () => cancelAnimationFrame(animationFrame);
-  }, [shouldReduceMotion, star]);
+  }, [
+    maxDelay,
+    maxSpeed,
+    minDelay,
+    minSpeed,
+    shouldReduceMotion,
+    starWidth,
+  ]);
 
   return (
     <svg
       ref={svgRef}
-      className={cn("w-full h-full absolute inset-0", className)}
+      aria-hidden="true"
+      className={cn("absolute inset-0 h-full w-full", className)}
     >
-      {!shouldReduceMotion && star && (
-        <rect
-          key={star.id}
-          x={star.x}
-          y={star.y}
-          width={starWidth * star.scale}
-          height={starHeight}
-          fill="url(#gradient)"
-          transform={`rotate(${star.angle}, ${
-            star.x + (starWidth * star.scale) / 2
-          }, ${star.y + starHeight / 2})`}
-        />
-      )}
       <defs>
-        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style={{ stopColor: trailColor, stopOpacity: 0 }} />
-          <stop
-            offset="100%"
-            style={{ stopColor: starColor, stopOpacity: 1 }}
-          />
+        <linearGradient
+          id={gradientId}
+          gradientUnits="userSpaceOnUse"
+          x1={-starWidth}
+          y1="0"
+          x2="0"
+          y2="0"
+        >
+          <stop offset="0%" stopColor={trailColor} stopOpacity="0" />
+          <stop offset="55%" stopColor={trailColor} stopOpacity="0.16" />
+          <stop offset="88%" stopColor={trailColor} stopOpacity="0.65" />
+          <stop offset="100%" stopColor={starColor} stopOpacity="1" />
         </linearGradient>
       </defs>
+      <g ref={groupRef} data-shooting-star>
+        <line
+          x1={-starWidth}
+          y1="0"
+          x2="0"
+          y2="0"
+          stroke={`url(#${gradientId})`}
+          strokeWidth={starHeight}
+          strokeLinecap="round"
+        />
+        <circle cx="0" cy="0" r="1.8" fill={starColor} />
+      </g>
     </svg>
   );
 };
