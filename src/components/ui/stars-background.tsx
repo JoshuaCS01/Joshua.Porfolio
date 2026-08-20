@@ -4,9 +4,9 @@ import React, {
   useState,
   useEffect,
   useRef,
-  RefObject,
   useCallback,
 } from "react";
+import { useReducedMotion } from "motion/react";
 
 interface StarProps {
   x: number;
@@ -34,7 +34,8 @@ export const StarsBackground: React.FC<StarBackgroundProps> = ({
   className,
 }) => {
   const [stars, setStars] = useState<StarProps[]>([]);
-const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const shouldReduceMotion = Boolean(useReducedMotion());
 
   const generateStars = useCallback(
     (width: number, height: number): StarProps[] => {
@@ -65,6 +66,8 @@ const canvasRef = useRef<HTMLCanvasElement | null>(null);
   );
 
   useEffect(() => {
+    const observedCanvas = canvasRef.current;
+
     const updateStars = () => {
       if (canvasRef.current) {
         const canvas = canvasRef.current;
@@ -81,13 +84,13 @@ const canvasRef = useRef<HTMLCanvasElement | null>(null);
     updateStars();
 
     const resizeObserver = new ResizeObserver(updateStars);
-    if (canvasRef.current) {
-      resizeObserver.observe(canvasRef.current);
+    if (observedCanvas) {
+      resizeObserver.observe(observedCanvas);
     }
 
     return () => {
-      if (canvasRef.current) {
-        resizeObserver.unobserve(canvasRef.current);
+      if (observedCanvas) {
+        resizeObserver.unobserve(observedCanvas);
       }
     };
   }, [
@@ -116,22 +119,26 @@ const canvasRef = useRef<HTMLCanvasElement | null>(null);
         ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
         ctx.fill();
 
-        if (star.twinkleSpeed !== null) {
+        if (!shouldReduceMotion && star.twinkleSpeed !== null) {
           star.opacity =
             0.5 +
             Math.abs(Math.sin((Date.now() * 0.001) / star.twinkleSpeed) * 0.5);
         }
       });
 
-      animationFrameId = requestAnimationFrame(render);
+      if (!shouldReduceMotion) {
+        animationFrameId = requestAnimationFrame(render);
+      }
     };
 
     render();
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      if (animationFrameId !== undefined) {
+        cancelAnimationFrame(animationFrameId);
+      }
     };
-  }, [stars]);
+  }, [shouldReduceMotion, stars]);
 
   return (
     <canvas

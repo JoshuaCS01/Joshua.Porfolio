@@ -1,11 +1,10 @@
 import React from 'react'
-import { GlobeDemo } from './ui/GridGlobe'
 import { HoverEffect } from './ui/card-hover-effect'
 import { projects } from '@/data/cardInfo'
 
 const Projects = () => {
     return (
-        <section id='projects'>
+        <div>
             <div className=" mx-auto px-8 text-white text-center lg:mb-5 md:mb-5">
 
                 <div className="hidden md:block">
@@ -29,7 +28,7 @@ const Projects = () => {
                 <HoverEffect items={projects} />
             </div>
 
-        </section>
+        </div>
     )
 }
 

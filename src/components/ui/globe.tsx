@@ -1,22 +1,24 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { Color, Scene, Fog, PerspectiveCamera, Vector3, Group } from "three";
-import ThreeGlobe from "three-globe";
-import { useThree, Canvas, extend } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import countries from "@/data/globe.json";
-declare module "@react-three/fiber" {
-  interface ThreeElements {
-    threeGlobe: ThreeElements["mesh"] & {
-      new (): ThreeGlobe;
-    };
-  }
-}
 
-extend({ ThreeGlobe: ThreeGlobe });
+import { useEffect, useMemo, useRef } from "react";
+import {
+  Color,
+  Fog,
+  MeshPhongMaterial,
+  PerspectiveCamera,
+  Scene,
+  Vector3,
+} from "three";
+import ThreeGlobe from "three-globe";
+import { Canvas, useThree } from "@react-three/fiber";
+import {
+  OrbitControls,
+  PerspectiveCamera as ResponsivePerspectiveCamera,
+} from "@react-three/drei";
+import { useReducedMotion } from "motion/react";
+import countries from "@/data/globe.json";
 
 const RING_PROPAGATION_SPEED = 3;
-const aspect = 1.2;
 const cameraZ = 300;
 
 type Position = {
@@ -27,6 +29,14 @@ type Position = {
   endLng: number;
   arcAlt: number;
   color: string;
+};
+
+type GlobePoint = {
+  size: number;
+  order: number;
+  color: string;
+  lat: number;
+  lng: number;
 };
 
 export type GlobeConfig = {
@@ -58,200 +68,217 @@ export type GlobeConfig = {
 interface WorldProps {
   globeConfig: GlobeConfig;
   data: Position[];
+  active?: boolean;
 }
 
-let numbersOfRings = [0];
+export function Globe({
+  globeConfig,
+  data,
+  active = true,
+}: WorldProps) {
+  const shouldReduceMotion = Boolean(useReducedMotion());
+  const invalidate = useThree((state) => state.invalidate);
+  const globe = useMemo(() => new ThreeGlobe(), []);
+  const settings = useMemo(
+    () => ({
+      pointSize: globeConfig.pointSize ?? 1,
+      atmosphereColor: globeConfig.atmosphereColor ?? "#ffffff",
+      showAtmosphere: globeConfig.showAtmosphere ?? true,
+      atmosphereAltitude: globeConfig.atmosphereAltitude ?? 0.1,
+      polygonColor:
+        globeConfig.polygonColor ?? "rgba(255,255,255,0.7)",
+      globeColor: globeConfig.globeColor ?? "#1d072e",
+      emissive: globeConfig.emissive ?? "#000000",
+      emissiveIntensity: globeConfig.emissiveIntensity ?? 0.1,
+      shininess: globeConfig.shininess ?? 0.9,
+      arcTime: globeConfig.arcTime ?? 2000,
+      arcLength: globeConfig.arcLength ?? 0.9,
+      rings: globeConfig.rings ?? 1,
+      maxRings: globeConfig.maxRings ?? 3,
+    }),
+    [globeConfig],
+  );
 
-export function Globe({ globeConfig, data }: WorldProps) {
-  const globeRef = useRef<ThreeGlobe | null>(null);
-  const groupRef =useRef<Group | null>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  const defaultProps = {
-    pointSize: 1,
-    atmosphereColor: "#ffffff",
-    showAtmosphere: true,
-    atmosphereAltitude: 0.1,
-    polygonColor: "rgba(255,255,255,0.7)",
-    globeColor: "#1d072e",
-    emissive: "#000000",
-    emissiveIntensity: 0.1,
-    shininess: 0.9,
-    arcTime: 2000,
-    arcLength: 0.9,
-    rings: 1,
-    maxRings: 3,
-    ...globeConfig,
-  };
-
-  // Initialize globe only once
   useEffect(() => {
-    if (!globeRef.current && groupRef.current) {
-      globeRef.current = new ThreeGlobe();
-      (groupRef.current as any).add(globeRef.current);
-      setIsInitialized(true);
-    }
-  }, []);
+    const material = globe.globeMaterial() as MeshPhongMaterial;
+    material.color = new Color(settings.globeColor);
+    material.emissive = new Color(settings.emissive);
+    material.emissiveIntensity = settings.emissiveIntensity;
+    material.shininess = settings.shininess;
+    invalidate();
+  }, [globe, invalidate, settings]);
 
-  // Build material when globe is initialized or when relevant props change
   useEffect(() => {
-    if (!globeRef.current || !isInitialized) return;
-
-    const globeMaterial = globeRef.current.globeMaterial() as unknown as {
-      color: Color;
-      emissive: Color;
-      emissiveIntensity: number;
-      shininess: number;
-    };
-    globeMaterial.color = new Color(globeConfig.globeColor);
-    globeMaterial.emissive = new Color(globeConfig.emissive);
-    globeMaterial.emissiveIntensity = globeConfig.emissiveIntensity || 0.1;
-    globeMaterial.shininess = globeConfig.shininess || 0.9;
-  }, [
-    isInitialized,
-    globeConfig.globeColor,
-    globeConfig.emissive,
-    globeConfig.emissiveIntensity,
-    globeConfig.shininess,
-  ]);
-
-  // Build data when globe is initialized or when data changes
-  useEffect(() => {
-    if (!globeRef.current || !isInitialized || !data) return;
-
-    const arcs = data;
-    let points = [];
-    for (let i = 0; i < arcs.length; i++) {
-      const arc = arcs[i];
-      const rgb = hexToRgb(arc.color) as { r: number; g: number; b: number };
-      points.push({
-        size: defaultProps.pointSize,
+    const points: GlobePoint[] = data.flatMap((arc) => [
+      {
+        size: settings.pointSize,
         order: arc.order,
         color: arc.color,
         lat: arc.startLat,
         lng: arc.startLng,
-      });
-      points.push({
-        size: defaultProps.pointSize,
+      },
+      {
+        size: settings.pointSize,
         order: arc.order,
         color: arc.color,
         lat: arc.endLat,
         lng: arc.endLng,
-      });
-    }
+      },
+    ]);
 
-    // remove duplicates for same lat and lng
     const filteredPoints = points.filter(
-      (v, i, a) =>
-        a.findIndex((v2) =>
-          ["lat", "lng"].every(
-            (k) => v2[k as "lat" | "lng"] === v[k as "lat" | "lng"],
-          ),
-        ) === i,
+      (point, index, allPoints) =>
+        allPoints.findIndex(
+          (candidate) =>
+            candidate.lat === point.lat && candidate.lng === point.lng,
+        ) === index,
     );
 
-    globeRef.current
+    globe
       .hexPolygonsData(countries.features)
       .hexPolygonResolution(3)
       .hexPolygonMargin(0.7)
-      .showAtmosphere(defaultProps.showAtmosphere)
-      .atmosphereColor(defaultProps.atmosphereColor)
-      .atmosphereAltitude(defaultProps.atmosphereAltitude)
-      .hexPolygonColor(() => defaultProps.polygonColor);
+      .showAtmosphere(settings.showAtmosphere)
+      .atmosphereColor(settings.atmosphereColor)
+      .atmosphereAltitude(settings.atmosphereAltitude)
+      .hexPolygonColor(() => settings.polygonColor);
 
-    globeRef.current
+    globe
       .arcsData(data)
-      .arcStartLat((d) => (d as { startLat: number }).startLat * 1)
-      .arcStartLng((d) => (d as { startLng: number }).startLng * 1)
-      .arcEndLat((d) => (d as { endLat: number }).endLat * 1)
-      .arcEndLng((d) => (d as { endLng: number }).endLng * 1)
-      .arcColor((e: any) => (e as { color: string }).color)
-      .arcAltitude((e) => (e as { arcAlt: number }).arcAlt * 1)
-      .arcStroke(() => [0.32, 0.28, 0.3][Math.round(Math.random() * 2)])
-      .arcDashLength(defaultProps.arcLength)
-      .arcDashInitialGap((e) => (e as { order: number }).order * 1)
+      .arcStartLat((item: object) => (item as Position).startLat)
+      .arcStartLng((item: object) => (item as Position).startLng)
+      .arcEndLat((item: object) => (item as Position).endLat)
+      .arcEndLng((item: object) => (item as Position).endLng)
+      .arcColor((item: object) => (item as Position).color)
+      .arcAltitude((item: object) => (item as Position).arcAlt)
+      .arcStroke(
+        (item: object) => [0.32, 0.28, 0.3][(item as Position).order % 3],
+      )
+      .arcDashLength(settings.arcLength)
+      .arcDashInitialGap((item: object) => (item as Position).order)
       .arcDashGap(15)
-      .arcDashAnimateTime(() => defaultProps.arcTime);
+      .arcDashAnimateTime(() => settings.arcTime);
 
-    globeRef.current
+    globe
       .pointsData(filteredPoints)
-      .pointColor((e) => (e as { color: string }).color)
+      .pointColor((item: object) => (item as GlobePoint).color)
       .pointsMerge(true)
-      .pointAltitude(0.0)
+      .pointAltitude(0)
       .pointRadius(2);
 
-    globeRef.current
+    globe
       .ringsData([])
-      .ringColor(() => defaultProps.polygonColor)
-      .ringMaxRadius(defaultProps.maxRings)
+      .ringColor(() => settings.polygonColor)
+      .ringMaxRadius(settings.maxRings)
       .ringPropagationSpeed(RING_PROPAGATION_SPEED)
       .ringRepeatPeriod(
-        (defaultProps.arcTime * defaultProps.arcLength) / defaultProps.rings,
+        (settings.arcTime * settings.arcLength) / settings.rings,
       );
-  }, [
-    isInitialized,
-    data,
-    defaultProps.pointSize,
-    defaultProps.showAtmosphere,
-    defaultProps.atmosphereColor,
-    defaultProps.atmosphereAltitude,
-    defaultProps.polygonColor,
-    defaultProps.arcLength,
-    defaultProps.arcTime,
-    defaultProps.rings,
-    defaultProps.maxRings,
-  ]);
+    invalidate();
+  }, [data, globe, invalidate, settings]);
 
-  // Handle rings animation with cleanup
   useEffect(() => {
-    if (!globeRef.current || !isInitialized || !data) return;
+    globe.ringsData([]);
+    invalidate();
+    if (!active || shouldReduceMotion || data.length === 0) return;
 
-    const interval = setInterval(() => {
-      if (!globeRef.current) return;
-
-      const newNumbersOfRings = genRandomNumbers(
-        0,
-        data.length,
-        Math.floor((data.length * 4) / 5),
+    let offset = 0;
+    const updateRings = () => {
+      const ringCount = Math.floor((data.length * 4) / 5);
+      const selectedIndices = new Set(
+        Array.from(
+          { length: ringCount },
+          (_, index) => (index + offset) % data.length,
+        ),
       );
 
-      const ringsData = data
-        .filter((d, i) => newNumbersOfRings.includes(i))
-        .map((d) => ({
-          lat: d.startLat,
-          lng: d.startLng,
-          color: d.color,
-        }));
+      globe.ringsData(
+        data
+          .filter((_, index) => selectedIndices.has(index))
+          .map((arc) => ({
+            lat: arc.startLat,
+            lng: arc.startLng,
+            color: arc.color,
+          })),
+      );
+      offset = (offset + 3) % data.length;
+      invalidate();
+    };
 
-      globeRef.current.ringsData(ringsData);
-    }, 2000);
+    updateRings();
+    const interval = window.setInterval(updateRings, 2000);
 
     return () => {
-      clearInterval(interval);
+      window.clearInterval(interval);
+      globe.ringsData([]);
     };
-  }, [isInitialized, data]);
+  }, [active, data, globe, invalidate, shouldReduceMotion]);
 
-  return <group ref={groupRef} />;
+  return <primitive object={globe} />;
 }
 
 export function WebGLRendererConfig() {
-  const { gl, size } = useThree();
+  const { gl, invalidate, size } = useThree();
 
   useEffect(() => {
-    gl.setPixelRatio(window.devicePixelRatio);
-    gl.setSize(size.width, size.height);
-    gl.setClearColor(0xffaaff, 0);
-  }, []);
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    gl.setPixelRatio(pixelRatio);
+    gl.setSize(size.width, size.height, false);
+    gl.setClearColor(0x000000, 0);
+
+    invalidate();
+  }, [gl, invalidate, size.height, size.width]);
 
   return null;
 }
 
-export function World(props: WorldProps) {
-  const { globeConfig } = props;
-  const scene = new Scene();
-  scene.fog = new Fog(0xffffff, 400, 2000);
+function ResponsiveCamera() {
+  const cameraRef = useRef<PerspectiveCamera>(null);
+  const { invalidate, size } = useThree();
+
+  useEffect(() => {
+    const activeCamera = cameraRef.current;
+    if (!activeCamera || size.height === 0) return;
+
+    activeCamera.aspect = size.width / size.height;
+    activeCamera.updateProjectionMatrix();
+    invalidate();
+  }, [invalidate, size.height, size.width]);
+
   return (
-    <Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
+    <ResponsivePerspectiveCamera
+      ref={cameraRef}
+      makeDefault
+      manual
+      fov={50}
+      near={0.1}
+      far={1800}
+      position={[0, 0, cameraZ]}
+    />
+  );
+}
+
+export function World({
+  globeConfig,
+  data,
+  active = true,
+}: WorldProps) {
+  const shouldReduceMotion = Boolean(useReducedMotion());
+  const scene = useMemo(() => {
+    const nextScene = new Scene();
+    nextScene.fog = new Fog(0xffffff, 400, 2000);
+    return nextScene;
+  }, []);
+  const animate = active && !shouldReduceMotion;
+
+  return (
+    <Canvas
+      className="h-full w-full"
+      scene={scene}
+      dpr={[1, 2]}
+      frameloop={animate ? "always" : "demand"}
+    >
+      <ResponsiveCamera />
       <WebGLRendererConfig />
       <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
       <directionalLight
@@ -267,43 +294,18 @@ export function World(props: WorldProps) {
         position={new Vector3(-200, 500, 200)}
         intensity={0.8}
       />
-      <Globe {...props} />
+      <Globe globeConfig={globeConfig} data={data} active={active} />
       <OrbitControls
         enablePan={false}
         enableZoom={false}
+        enableRotate={!shouldReduceMotion}
         minDistance={cameraZ}
         maxDistance={cameraZ}
-        autoRotateSpeed={1}
-        autoRotate={true}
+        autoRotateSpeed={globeConfig.autoRotateSpeed ?? 0.5}
+        autoRotate={animate && globeConfig.autoRotate !== false}
         minPolarAngle={Math.PI / 3.5}
         maxPolarAngle={Math.PI - Math.PI / 3}
       />
     </Canvas>
   );
-}
-
-export function hexToRgb(hex: string) {
-  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, function (m, r, g, b) {
-    return r + r + g + g + b + b;
-  });
-
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : null;
-}
-
-export function genRandomNumbers(min: number, max: number, count: number) {
-  const arr = [];
-  while (arr.length < count) {
-    const r = Math.floor(Math.random() * (max - min)) + min;
-    if (arr.indexOf(r) === -1) arr.push(r);
-  }
-
-  return arr;
 }

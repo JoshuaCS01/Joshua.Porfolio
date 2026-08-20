@@ -1,6 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState, useRef } from "react";
+import { useReducedMotion } from "motion/react";
 
 interface ShootingStar {
   id: number;
@@ -54,8 +55,11 @@ export const ShootingStars: React.FC<ShootingStarsProps> = ({
 }) => {
   const [star, setStar] = useState<ShootingStar | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const shouldReduceMotion = Boolean(useReducedMotion());
 
   useEffect(() => {
+    if (shouldReduceMotion) return;
+
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
     let isCancelled = false;
 
@@ -84,9 +88,11 @@ export const ShootingStars: React.FC<ShootingStarsProps> = ({
       isCancelled = true;
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [minSpeed, maxSpeed, minDelay, maxDelay]);
+  }, [minSpeed, maxSpeed, minDelay, maxDelay, shouldReduceMotion]);
 
   useEffect(() => {
+    if (shouldReduceMotion) return;
+
     const moveStar = () => {
       if (star) {
         setStar((prevStar) => {
@@ -120,14 +126,14 @@ export const ShootingStars: React.FC<ShootingStarsProps> = ({
 
     const animationFrame = requestAnimationFrame(moveStar);
     return () => cancelAnimationFrame(animationFrame);
-  }, [star]);
+  }, [shouldReduceMotion, star]);
 
   return (
     <svg
       ref={svgRef}
       className={cn("w-full h-full absolute inset-0", className)}
     >
-      {star && (
+      {!shouldReduceMotion && star && (
         <rect
           key={star.id}
           x={star.x}
