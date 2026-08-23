@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import React, { useCallback, useEffect, useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import React, { useEffect, useState } from "react";
 
 export const ImagesSlider = ({
   images,
@@ -21,25 +21,29 @@ export const ImagesSlider = ({
   direction?: "up" | "down";
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [loadedImages, setLoadedImages] = useState<string[]>([]);
-  const shouldReduceMotion = Boolean(useReducedMotion());
 
-  const handleNext = useCallback(() => {
+  const handleNext = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex + 1 === images.length ? 0 : prevIndex + 1
     );
-  }, [images.length]);
+  };
 
-  const handlePrevious = useCallback(() => {
+  const handlePrevious = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex - 1 < 0 ? images.length - 1 : prevIndex - 1
     );
-  }, [images.length]);
+  };
 
   useEffect(() => {
-    let cancelled = false;
+    loadImages();
+  }, []);
+
+  const loadImages = () => {
+    setLoading(true);
     const loadPromises = images.map((image) => {
-      return new Promise<string>((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         const img = new Image();
         img.src = image;
         img.onload = () => resolve(image);
@@ -48,19 +52,13 @@ export const ImagesSlider = ({
     });
 
     Promise.all(loadPromises)
-      .then((nextLoadedImages) => {
-        if (!cancelled) setLoadedImages(nextLoadedImages);
+      .then((loadedImages) => {
+        setLoadedImages(loadedImages as string[]);
+        setLoading(false);
       })
       .catch((error) => console.error("Failed to load images", error));
-
-    return () => {
-      cancelled = true;
-    };
-  }, [images]);
-
+  };
   useEffect(() => {
-    if (shouldReduceMotion) return;
-
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowRight") {
         handleNext();
@@ -72,24 +70,44 @@ export const ImagesSlider = ({
     window.addEventListener("keydown", handleKeyDown);
 
     // autoplay
-    let interval: ReturnType<typeof setInterval> | undefined;
+    let interval: any;
     if (autoplay) {
       interval = setInterval(() => {
         handleNext();
-      }, 8000);
+      }, 5000);
     }
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
-      if (interval !== undefined) clearInterval(interval);
+      clearInterval(interval);
     };
-  }, [
-    autoplay,
-    handleNext,
-    handlePrevious,
-    images.length,
-    shouldReduceMotion,
-  ]);
+  }, []);
+
+  const slideVariants = {
+    visible: {
+      scale: 1,
+      rotateX: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: [0.645, 0.045, 0.355, 1.0] as const,
+      },
+    },
+    upExit: {
+      opacity: 1,
+      y: "-150%",
+      transition: {
+        duration: 1,
+      },
+    },
+    downExit: {
+      opacity: 1,
+      y: "150%",
+      transition: {
+        duration: 1,
+      },
+    },
+  };
 
   const areImagesLoaded = loadedImages.length > 0;
 
@@ -111,25 +129,14 @@ export const ImagesSlider = ({
       )}
 
       {areImagesLoaded && (
-        <AnimatePresence initial={false}>
+        <AnimatePresence>
           <motion.img
             key={currentIndex}
             src={loadedImages[currentIndex]}
-            initial={
-              shouldReduceMotion
-                ? false
-                : { opacity: 0, y: direction === "up" ? 6 : -6 }
-            }
-            animate={{ opacity: 1, y: 0 }}
-            exit={
-              shouldReduceMotion
-                ? undefined
-                : { opacity: 0, y: direction === "up" ? -6 : 6 }
-            }
-            transition={{
-              duration: shouldReduceMotion ? 0 : 1.4,
-              ease: [0.22, 1, 0.36, 1],
-            }}
+            initial="initial"
+            animate="visible"
+            exit={direction === "up" ? "upExit" : "downExit"}
+            variants={slideVariants}
             className="image h-full w-full absolute inset-0 object-cover object-center"
           />
         </AnimatePresence>
