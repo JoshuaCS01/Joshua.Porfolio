@@ -32,7 +32,6 @@ export function OrbitingCircles({
       {path && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
           className="pointer-events-none absolute inset-0 size-full"
         >
           <circle
@@ -61,7 +60,7 @@ export function OrbitingCircles({
               } as React.CSSProperties
             }
             className={cn(
-              "animate-orbit absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center rounded-full motion-reduce:[animation-play-state:paused]",
+              "animate-orbit absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center rounded-full",
               {
                 "[animation-direction:reverse]": reverse,
               },

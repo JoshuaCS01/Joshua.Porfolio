@@ -103,13 +103,3 @@ html {
   font-family: "Montserrat", sans-serif;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  .animate-orbit {
-    animation-play-state: paused !important;
-  }
-}
-

@@ -8,7 +8,7 @@ import {
   useMotionValueEvent,
 } from "motion/react";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 
 interface NavbarProps {
@@ -47,7 +47,6 @@ interface MobileNavMenuProps {
   className?: string;
   isOpen: boolean;
   onClose: () => void;
-  id?: string;
 }
 
 export const Navbar = ({ children, className }: NavbarProps) => {
@@ -191,26 +190,11 @@ export const MobileNavMenu = ({
   className,
   isOpen,
   onClose,
-  id,
 }: MobileNavMenuProps) => {
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-
-    window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
-  }, [isOpen, onClose]);
-
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          id={id}
-          role="navigation"
-          aria-label="Mobile navigation"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -229,27 +213,14 @@ export const MobileNavMenu = ({
 export const MobileNavToggle = ({
   isOpen,
   onClick,
-  controlsId,
 }: {
   isOpen: boolean;
   onClick: () => void;
-  controlsId: string;
 }) => {
-  return (
-    <button
-      type="button"
-      aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-      aria-expanded={isOpen}
-      aria-controls={controlsId}
-      onClick={onClick}
-      className="relative z-20 inline-flex min-h-11 min-w-11 items-center justify-center rounded-full text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:text-white"
-    >
-      {isOpen ? (
-        <IconX aria-hidden="true" />
-      ) : (
-        <IconMenu2 aria-hidden="true" />
-      )}
-    </button>
+  return isOpen ? (
+    <IconX className="text-black dark:text-white" onClick={onClick} />
+  ) : (
+    <IconMenu2 className="text-black dark:text-white" onClick={onClick} />
   );
 };
 
@@ -260,8 +231,8 @@ export const NavbarLogo = () => {
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
     >
       <img
-        src="/favicon.ico"
-        alt="Joshua Cherenfant home"
+        src={'./favicon.ico'}
+        alt="logo"
         width={35}
         height={35}
       />

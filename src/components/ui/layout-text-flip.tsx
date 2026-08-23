@@ -1,7 +1,7 @@
 "use client";
-
-import React, { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { cn } from "@/lib/utils";
 import { ColourfulText } from "./colourful-text";
 
 export const LayoutTextFlip = ({
@@ -14,72 +14,51 @@ export const LayoutTextFlip = ({
   duration?: number;
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const shouldReduceMotion = Boolean(useReducedMotion());
-  const longestWord = useMemo(
-    () =>
-      words.reduce(
-        (longest, candidate) =>
-          candidate.length > longest.length ? candidate : longest,
-        words[0] ?? "",
-      ),
-    [words],
-  );
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (shouldReduceMotion || words.length < 2) return;
+    const id = requestAnimationFrame(() => setReady(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
-    const interval = window.setInterval(() => {
-      setCurrentIndex((previous) => (previous + 1) % words.length);
+  useEffect(() => {
+    if (!ready) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % words.length);
     }, duration);
 
-    return () => window.clearInterval(interval);
-  }, [duration, shouldReduceMotion, words.length]);
+    return () => clearInterval(interval);
+  }, [ready, words.length, duration]);
 
-  const word = words[currentIndex] ?? words[0] ?? "";
+  const word = words[currentIndex] ?? words[0];
 
   return (
-    <span className="inline-flex max-w-full flex-col items-center justify-center gap-x-[0.28em] gap-y-2 font-sans text-[clamp(1.75rem,7vw,4.5rem)] font-bold leading-none tracking-tight text-white drop-shadow-lg sm:flex-row sm:items-baseline">
-      <span data-hero-prefix className="shrink-0 whitespace-nowrap">
-        {text.trimEnd()}
-      </span>
+    <>
+      <motion.span className="text-2xl font-bold tracking-tight drop-shadow-lg md:text-7xl">
+        {text}
+      </motion.span>
 
-      <span
-        data-hero-phrase-slot
-        className="relative inline-grid max-w-full text-center sm:text-left"
-        aria-live={shouldReduceMotion ? "off" : "polite"}
+      <motion.span
+        className="relative w-fit overflow-hidden rounded-md border border-transparent bg-white px-4 py-2 font-sans text-2xl font-bold tracking-tight text-black shadow-sm ring shadow-black/10 ring-black/10 drop-shadow-lg md:text-7xl dark:bg-neutral-900 dark:text-white dark:shadow-sm dark:ring-1 dark:shadow-white/10 dark:ring-white/10"
       >
-        <span
-          className="invisible col-start-1 row-start-1 whitespace-nowrap"
-          aria-hidden="true"
-        >
-          {longestWord}
-        </span>
-        <AnimatePresence initial={false}>
+        <AnimatePresence mode="wait" initial={false}>
           <motion.span
-            data-hero-phrase
-            key={shouldReduceMotion ? "reduced-motion-phrase" : currentIndex}
-            initial={
-              shouldReduceMotion
-                ? false
-                : { y: -18, opacity: 0, filter: "blur(6px)" }
+            key={currentIndex}
+            initial={ready ? { y: -20, opacity: 0, filter: "blur(6px)" } : false}
+            animate={
+              ready
+                ? { y: 0, opacity: 1, filter: "blur(0px)" }
+                : { opacity: 1 }
             }
-            animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-            exit={
-              shouldReduceMotion
-                ? undefined
-                : { y: 18, opacity: 0, filter: "blur(6px)" }
-            }
-            transition={
-              shouldReduceMotion
-                ? { duration: 0 }
-                : { duration: 0.4, ease: "easeOut" }
-            }
-            className="absolute inset-x-0 top-0 whitespace-nowrap"
+            exit={{ y: 20, opacity: 0, filter: "blur(6px)" }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className={cn("inline-block whitespace-nowrap")}
           >
-            <ColourfulText text={word} />
+            {ready ? <ColourfulText text={word} /> : word}
           </motion.span>
         </AnimatePresence>
-      </span>
-    </span>
+      </motion.span>
+    </>
   );
 };
