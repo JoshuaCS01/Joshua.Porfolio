@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { Color, Scene, Fog, PerspectiveCamera, Vector3, Group } from "three";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Color, Scene, Fog, Vector3, Group, Material, BufferGeometry } from "three";
 import ThreeGlobe from "three-globe";
-import { useThree, Canvas, extend } from "@react-three/fiber";
+import { Canvas, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import countries from "@/data/globe.json";
 declare module "@react-three/fiber" {
@@ -16,7 +16,6 @@ declare module "@react-three/fiber" {
 extend({ ThreeGlobe: ThreeGlobe });
 
 const RING_PROPAGATION_SPEED = 3;
-const aspect = 1.2;
 const cameraZ = 300;
 
 type Position = {
@@ -86,11 +85,30 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
   // Initialize globe only once
   useEffect(() => {
-    if (!globeRef.current && groupRef.current) {
-      globeRef.current = new ThreeGlobe();
-      (groupRef.current as any).add(globeRef.current);
-      setIsInitialized(true);
-    }
+    const group = groupRef.current;
+    if (!group) return;
+
+    const globe = new ThreeGlobe();
+    globeRef.current = globe;
+    group.add(globe);
+    setIsInitialized(true);
+
+    return () => {
+      setIsInitialized(false);
+      group.remove(globe);
+      globe.traverse((object) => {
+        const disposable = object as unknown as {
+          geometry?: BufferGeometry;
+          material?: Material | Material[];
+        };
+        disposable.geometry?.dispose();
+        const materials = Array.isArray(disposable.material)
+          ? disposable.material
+          : disposable.material ? [disposable.material] : [];
+        materials.forEach((material) => material.dispose());
+      });
+      globeRef.current = null;
+    };
   }, []);
 
   // Build material when globe is initialized or when relevant props change
@@ -234,25 +252,21 @@ export function Globe({ globeConfig, data }: WorldProps) {
   return <group ref={groupRef} />;
 }
 
-export function WebGLRendererConfig() {
-  const { gl, size } = useThree();
-
-  useEffect(() => {
-    gl.setPixelRatio(window.devicePixelRatio);
-    gl.setSize(size.width, size.height);
-    gl.setClearColor(0xffaaff, 0);
-  }, []);
-
-  return null;
-}
-
 export function World(props: WorldProps) {
   const { globeConfig } = props;
-  const scene = new Scene();
-  scene.fog = new Fog(0xffffff, 400, 2000);
+  const scene = useMemo(() => {
+    const nextScene = new Scene();
+    nextScene.fog = new Fog(0xffffff, 400, 2000);
+    return nextScene;
+  }, []);
+
   return (
-    <Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
-      <WebGLRendererConfig />
+    <Canvas
+      scene={scene}
+      dpr={[1, 2]}
+      camera={{ fov: 50, near: 180, far: 1800, position: [0, 0, cameraZ] }}
+      gl={{ alpha: true, antialias: true }}
+    >
       <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
       <directionalLight
         color={globeConfig.directionalLeftLight}

@@ -35,13 +35,24 @@ export const LayoutTextFlip = ({
 
   return (
     <>
-      <motion.span className="text-2xl font-bold tracking-tight drop-shadow-lg md:text-7xl">
+      <motion.span
+        data-hero-label
+        className="whitespace-nowrap text-[clamp(1.25rem,4.15vw,3.875rem)] font-extrabold leading-none tracking-tight drop-shadow-lg"
+      >
         {text}
       </motion.span>
 
       <motion.span
-        className="relative w-fit overflow-hidden rounded-md border border-transparent bg-white px-4 py-2 font-sans text-2xl font-bold tracking-tight text-black shadow-sm ring shadow-black/10 ring-black/10 drop-shadow-lg md:text-7xl dark:bg-neutral-900 dark:text-white dark:shadow-sm dark:ring-1 dark:shadow-white/10 dark:ring-white/10"
+        data-hero-phrase-box
+        className="relative grid h-[clamp(4rem,8vw,7rem)] w-max max-w-full items-center justify-start overflow-visible border-0 bg-transparent pr-[0.08em] font-sans text-[clamp(1.25rem,4.15vw,3.875rem)] font-extrabold leading-none tracking-tight shadow-none"
       >
+        <span aria-hidden="true" className="invisible col-start-1 row-start-1 grid w-max">
+          {words.map((candidate) => (
+            <span key={candidate} className="col-start-1 row-start-1 justify-self-start whitespace-nowrap">
+              {candidate}
+            </span>
+          ))}
+        </span>
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
             key={currentIndex}
@@ -53,7 +64,7 @@ export const LayoutTextFlip = ({
             }
             exit={{ y: 20, opacity: 0, filter: "blur(6px)" }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className={cn("inline-block whitespace-nowrap")}
+            className={cn("col-start-1 row-start-1 inline-flex w-max items-center justify-start whitespace-nowrap text-left")}
           >
             {ready ? <ColourfulText text={word} /> : word}
           </motion.span>

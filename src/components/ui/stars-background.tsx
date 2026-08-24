@@ -4,7 +4,6 @@ import React, {
   useState,
   useEffect,
   useRef,
-  RefObject,
   useCallback,
 } from "react";
 
@@ -81,13 +80,14 @@ const canvasRef = useRef<HTMLCanvasElement | null>(null);
     updateStars();
 
     const resizeObserver = new ResizeObserver(updateStars);
-    if (canvasRef.current) {
-      resizeObserver.observe(canvasRef.current);
+    const canvas = canvasRef.current;
+    if (canvas) {
+      resizeObserver.observe(canvas);
     }
 
     return () => {
-      if (canvasRef.current) {
-        resizeObserver.unobserve(canvasRef.current);
+      if (canvas) {
+        resizeObserver.unobserve(canvas);
       }
     };
   }, [
@@ -106,9 +106,11 @@ const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let animationFrameId: number;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let animationFrameId = 0;
 
     const render = () => {
+      animationFrameId = 0;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       stars.forEach((star) => {
         ctx.beginPath();
@@ -116,20 +118,35 @@ const canvasRef = useRef<HTMLCanvasElement | null>(null);
         ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
         ctx.fill();
 
-        if (star.twinkleSpeed !== null) {
+        if (!reducedMotion.matches && star.twinkleSpeed !== null) {
           star.opacity =
             0.5 +
             Math.abs(Math.sin((Date.now() * 0.001) / star.twinkleSpeed) * 0.5);
         }
       });
 
-      animationFrameId = requestAnimationFrame(render);
+      if (!document.hidden && !reducedMotion.matches) {
+        animationFrameId = requestAnimationFrame(render);
+      }
+    };
+
+    const resumeRendering = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = 0;
+        return;
+      }
+      if (!animationFrameId) render();
     };
 
     render();
+    document.addEventListener("visibilitychange", resumeRendering);
+    reducedMotion.addEventListener("change", resumeRendering);
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      document.removeEventListener("visibilitychange", resumeRendering);
+      reducedMotion.removeEventListener("change", resumeRendering);
     };
   }, [stars]);
 

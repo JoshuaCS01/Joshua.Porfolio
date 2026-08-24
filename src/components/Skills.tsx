@@ -1,26 +1,24 @@
 import React from 'react'
-import { File, Search, Settings } from "lucide-react"
 import { OrbitingCircles } from "@/components/ui/orbiting-circles"
 
 const cpp = "C++";
 
 const SkillItem = ({ src, label }: { src: string; label: string }) => (
-    <div className="flex flex-col items-center justify-center w-100 h-100">
-        <img src={src} className="lg:w-15 lg:h-15  md:w-15 md:h-15  w-7 h-7 object-contain" />
-        <p className="text-white text-xs lg:text-base md:text-base mt-1 whitespace-nowrap ">{label}</p>
+    <div className="flex w-auto flex-col items-center justify-center">
+        <img src={src} alt="" className="size-7 object-contain lg:size-11" />
+        <p className="mt-1 whitespace-nowrap text-[0.625rem] text-white lg:text-xs">{label}</p>
     </div>
 );
 
 const Skills = () => {
     return (
         <section id='skills'>
-            <div className="flex flex-col  md:flex-row items-center justify-center 1440p:gap-100  1080p:gap-75 gap-0 h-200 lg:mb-50 md:mb-50 mb-0  lg:w-max mg:w-max w-auto mx-auto">
+            <div className="mx-auto grid w-full items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(28rem,38rem)] lg:gap-16">
 
                 {/* LEFT SIDE (text) */}
-                <div className="w-full md:w-1/2 text-white ">
-                    <h1 className="1440p:text-7xl 1080p:text-5xl text-3xl underline font-bold font-heading text-center mx-auto w-fit lg:mb-10 md:mb-10">MY SKILLS</h1>
-                    <br></br>
-                    <div className=" 1440p:text-xl 1080p:text-lg text-xs font-head leading-relaxed font-heading space-y-6 max-w-2xl text-justify">
+                <div className="w-full text-white">
+                    <h1 className="font-display mx-auto mb-8 w-fit text-center text-[clamp(1.75rem,4.2vw,3.75rem)] underline">MY SKILLS</h1>
+                    <div className="mx-auto max-w-2xl space-y-6 break-words text-justify font-heading text-[clamp(0.9375rem,1.4vw,1.1875rem)] leading-[1.7] hyphens-auto">
                         <p>Through both my coursework and personal projects I have developed a strong skill set in front-end development.
                             My foundation is paved with HTML, CSS, JavaScript, and TypeScript and I frequently use React and Next.js for modern web applications.</p>
 
@@ -33,9 +31,9 @@ const Skills = () => {
                     </div>
                 </div>
 
-                <div className="hidden md:block">
-                    <div className="relative w-[500px] h-[500px] flex items-center justify-center overflow-visible">
-                        <OrbitingCircles radius={350} >
+                <div className="hidden lg:block">
+                    <div className="relative mx-auto flex aspect-square w-full max-w-[38rem] items-center justify-center overflow-hidden">
+                        <OrbitingCircles radius={240} >
                             <SkillItem src="/icons/nodejs/nodejs-plain-wordmark.svg" label="Node.js" />
                             <SkillItem src="/icons/nextjs/nextjs-original.svg" label="Next.js" />
                             <SkillItem src="/icons/git/git-original.svg" label="Git" />
@@ -47,7 +45,7 @@ const Skills = () => {
                             <SkillItem src="/icons/android/android-original.svg" label="AndroidStudio" />
 
                         </OrbitingCircles>
-                        <OrbitingCircles radius={150} reverse>
+                        <OrbitingCircles radius={110} reverse>
                             <SkillItem src="/icons/java/java-original.svg" label="Java" />
                             <SkillItem src="/icons/c/c-original.svg" label="C" />
                             <SkillItem src="/icons/cplusplus/cplusplus-original.svg" label={cpp} />
@@ -61,9 +59,9 @@ const Skills = () => {
                     </div>
 
 
-                    <div className="md:hidden">
-                        <div className="relative w-[500px] h-[500px] flex items-center justify-center overflow-visible">
-                            <OrbitingCircles radius={150} >
+                    <div className="hidden sm:block lg:hidden">
+                        <div className="relative mx-auto flex size-[430px] max-w-full items-center justify-center overflow-hidden">
+                            <OrbitingCircles radius={175} >
                                 <SkillItem src="/icons/nodejs/nodejs-plain-wordmark.svg" label="Node.js" />
                                 <SkillItem src="/icons/nextjs/nextjs-original.svg" label="Next.js" />
                                 <SkillItem src="/icons/git/git-original.svg" label="Git" />
@@ -75,7 +73,7 @@ const Skills = () => {
                                 <SkillItem src="/icons/android/android-original.svg" label="AndroidStudio" />
 
                             </OrbitingCircles>
-                            <OrbitingCircles radius={75} reverse>
+                            <OrbitingCircles radius={78} reverse>
                                 <SkillItem src="/icons/java/java-original.svg" label="Java" />
                                 <SkillItem src="/icons/c/c-original.svg" label="C" />
                                 <SkillItem src="/icons/cplusplus/cplusplus-original.svg" label={cpp} />
@@ -87,8 +85,34 @@ const Skills = () => {
 
 
                             </OrbitingCircles>
+                        </div>
                     </div>
-                </div>
+
+                    <div className="sm:hidden">
+                        <div className="relative mx-auto flex size-[300px] max-w-full items-center justify-center overflow-visible">
+                            <OrbitingCircles radius={128}>
+                                <SkillItem src="/icons/nodejs/nodejs-plain-wordmark.svg" label="Node.js" />
+                                <SkillItem src="/icons/nextjs/nextjs-original.svg" label="Next.js" />
+                                <SkillItem src="/icons/git/git-original.svg" label="Git" />
+                                <SkillItem src="/icons/linux/linux-original.svg" label="Linux" />
+                                <SkillItem src="/icons/mysql/mysql-original.svg" label="MySQL" />
+                                <SkillItem src="/icons/mongodb/mongodb-original.svg" label="MongoDB" />
+                                <SkillItem src="/icons/figma/figma-original.svg" label="Figma" />
+                                <SkillItem src="/icons/tailwindcss/tailwindcss-original.svg" label="Tailwind" />
+                                <SkillItem src="/icons/android/android-original.svg" label="AndroidStudio" />
+                            </OrbitingCircles>
+                            <OrbitingCircles radius={58} reverse>
+                                <SkillItem src="/icons/java/java-original.svg" label="Java" />
+                                <SkillItem src="/icons/c/c-original.svg" label="C" />
+                                <SkillItem src="/icons/cplusplus/cplusplus-original.svg" label={cpp} />
+                                <SkillItem src="/icons/html5/html5-original.svg" label="HTML5" />
+                                <SkillItem src="/icons/css3/css3-original.svg" label="CSS3" />
+                                <SkillItem src="/icons/javascript/javascript-original.svg" label="JavaScript" />
+                                <SkillItem src="/icons/typescript/typescript-original.svg" label="TypeScript" />
+                                <SkillItem src="/icons/react/react-original.svg" label="React" />
+                            </OrbitingCircles>
+                        </div>
+                    </div>
             </div>
         </section >
     )

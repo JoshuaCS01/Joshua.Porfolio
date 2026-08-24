@@ -3,6 +3,11 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 
+type FocusCard = {
+    title: string;
+    src: string;
+};
+
 export const Card = React.memo(
     ({
         card,
@@ -10,7 +15,7 @@ export const Card = React.memo(
         hovered,
         setHovered,
     }: {
-        card: any;
+        card: FocusCard;
         index: number;
         hovered: number | null;
         setHovered: React.Dispatch<React.SetStateAction<number | null>>;
@@ -19,7 +24,7 @@ export const Card = React.memo(
             onMouseEnter={() => setHovered(index)}
             onMouseLeave={() => setHovered(null)}
             className={cn(
-                "relative group overflow-hidden rounded-2xl w-150 max-w-2xl bg-gray-100 dark:bg-neutral-900 transition-all duration-300 ease-out",
+                "group relative aspect-[4/5] w-full max-w-[34rem] overflow-hidden rounded-2xl bg-gray-100 transition-all duration-300 ease-out dark:bg-neutral-900",
                 hovered !== null && hovered !== index && "blur-sm scale-[0.98]"
 
             )}
@@ -27,7 +32,7 @@ export const Card = React.memo(
             <img
                 src={card.src}
                 alt={card.title}
-                className= "inset-0 w-70 h-70 md:w-full md:h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <div
                 className={cn(
@@ -45,16 +50,11 @@ export const Card = React.memo(
 
 Card.displayName = "Card";
 
-type Card = {
-    title: string;
-    src: string;
-};
-
-export function FocusCards({ cards }: { cards: Card[] }) {
+export function FocusCards({ cards }: { cards: FocusCard[] }) {
     const [hovered, setHovered] = useState<number | null>(null);
 
     return (
-        <div className="flex justify-center items-center max-w-5xl md:px-8">
+        <div className="flex min-w-0 items-center justify-center">
             {cards.map((card, index) => (
                 <Card
                     key={card.title}

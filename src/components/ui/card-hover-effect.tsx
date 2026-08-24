@@ -1,7 +1,5 @@
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "motion/react";
-
-import { useState } from "react";
+import React from "react";
 
 export const HoverEffect = ({
     items,
@@ -16,39 +14,34 @@ export const HoverEffect = ({
     }[];
     className?: string;
 }) => {
-    let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
     return (
         <div
             className={cn(
-                "grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3  py-10 w-full h-[50%]",
+                "grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3",
                 className
             )}
         >
-            {items.map((item, idx) => (
+            {items.map((item) => (
                 <a
                     href={item?.link}
                     key={item?.link}
-                    className="relative group  block p-2 h-full w-full"
-                    onMouseEnter={() => setHoveredIndex(idx)}
+                    className="group relative block h-full w-full"
                 >
-                    <Card className="1080p:h-130 1440p:h-170 md:200 h-90 relative overflow-hidden hover:dark:bg-gray-700 hover:ring-2 hover:ring-amber-50">
-                        {/* Background Image */}
-                        <div className="absolute inset-0 z-0 lg:h-150 h-50">
+                    <Card className="relative flex h-full flex-col overflow-hidden hover:ring-2 hover:ring-amber-50">
+                        <div className="relative h-56 shrink-0 overflow-hidden sm:h-64 lg:h-72">
                             <img
                                 src={item.img}
                                 alt={item.title}
-                                className="w-full h-full object-cover"
+                                className="h-full w-full object-cover"
                             />
+                            <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-neutral-900/90 to-transparent" />
                         </div>
-                        {/* Gradient */}
-                        <div className="absolute inset-0 bg-black/15 z-10" />
 
-                        <div className="absolute bottom-0 left-0 right-0 z-50">
-                            <div className="p-4 bg-black/70 backdrop-blur-sm">
+                        <div className="relative z-20 flex flex-1 bg-gradient-to-b from-neutral-900/90 to-neutral-800/95">
+                            <div className="w-full p-5">
                                 <CardTitle className="mt-0">{item.title}</CardTitle>
 
-                                <CardDescription className="mt-1 text-white line-clamp-2 hover:line-clamp-none">
+                                <CardDescription className="mt-1 text-white">
                                     {item.description}
                                 </CardDescription>
 
@@ -56,7 +49,7 @@ export const HoverEffect = ({
                                     {item.skills.map((skill, i) => (
                                         <span
                                             key={i}
-                                            className="text-white text-[10px] 1080p:text-xs 1440p:text-base px-2 py-1 bg-white/10 rounded-full border border-white/20 hover:bg-white hover:text-black "
+                                            className="rounded-full border border-white/20 bg-white/10 px-2 py-1 text-[clamp(0.625rem,1vw,0.75rem)] text-white hover:bg-white hover:text-black"
                                         >
                                             {skill}
                                         </span>
@@ -72,11 +65,11 @@ export const HoverEffect = ({
     );
 };
 
-export const Card = ({ className, children }: any) => {
+export const Card = ({ className, children }: { className?: string; children: React.ReactNode }) => {
     return (
         <div
             className={cn(
-                "rounded-2xl h-full w-full overflow-hidden bg-black border border-transparent dark:border-white/[0.2] group-hover:border-slate-700 relative z-20",
+                "relative z-20 h-full w-full overflow-hidden rounded-2xl border border-white/15 bg-neutral-900/90 shadow-lg shadow-black/20 transition-colors group-hover:border-white/30",
                 className
             )}
         >

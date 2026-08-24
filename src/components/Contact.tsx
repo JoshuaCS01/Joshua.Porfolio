@@ -1,10 +1,9 @@
 import React, { FormEvent, useRef, useState } from 'react'
 import { Label } from './ui/label';
 import { Input } from './ui/input';
-import { IconBrandGithub, IconBrandGoogle, IconBrandOnlyfans } from '@tabler/icons-react';
+import { IconBrandGithub } from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
 import emailjs from '@emailjs/browser';
-import MagicButton from './ui/MagicButton';
 
 
 
@@ -37,9 +36,9 @@ export const Contact: React.FC = () => {
       );
   };
   return (
-    <div className="shadow-input mx-auto max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
-      <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
-        Want to contact me?
+    <div className="shadow-input mx-auto w-full max-w-lg rounded-2xl bg-white p-[clamp(1.25rem,4vw,2rem)] dark:bg-black">
+      <h2 className="font-display text-[clamp(1.125rem,2.5vw,1.5rem)] tracking-[-0.02em] text-neutral-800 dark:text-neutral-200">
+        Contact Me
       </h2>
 
       <form ref={form} className="my-8" onSubmit={sendEmail}>
@@ -63,7 +62,7 @@ export const Contact: React.FC = () => {
 
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Message</Label>
-          <textarea className="text-white bg-custom-ground" name="message" placeholder="Type Message Here..."  rows={4} />
+          <textarea className="min-h-32 w-full rounded-md bg-custom-ground p-3 text-white" name="message" placeholder="Type Message Here..." rows={4} />
         </LabelInputContainer>
 
         <button
@@ -110,8 +109,10 @@ export const Contact: React.FC = () => {
           </a>
         </div>
         <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
-        <p className="text-white ">Phone: (678)-651-6117</p>
-        <p className="text-white">E-mail: ftyberius1213@gmail.com</p>
+        <div className="space-y-1 text-sm text-white sm:text-base">
+          <p>Phone: (678)-651-6117</p>
+          <p className="break-all sm:break-normal">E-mail: ftyberius1213@gmail.com</p>
+        </div>
       </form>
     </div>
   );
